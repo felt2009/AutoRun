@@ -1,0 +1,91 @@
+Delay 100 - TickCount()
+KeyPress "Home"
+Delay 300 - TickCount()
+KeyPress "Home"
+
+
+
+
+Delay 2933- TickCount()
+ TouchDownEvent 921,1325,0
+Delay 2979- TickCount()
+ TouchUpEvent 0
+Delay 4878- TickCount()
+ TouchDownEvent 151,602,0
+Delay 4948- TickCount()
+ TouchUpEvent 0
+Delay 6027- TickCount()
+ TouchDownEvent 709,1783,0
+Delay 6086- TickCount()
+ TouchUpEvent 0
+Delay 7198- TickCount()
+ TouchDownEvent 721,847,0
+Delay 7257- TickCount()
+ TouchUpEvent 0
+Delay 8685- TickCount()
+ TouchDownEvent 691,1596,0
+TouchMoveEvent 691,1587,0,60
+TouchMoveEvent 691,1568,0,13
+TouchMoveEvent 692,1540,0,11
+TouchMoveEvent 694,1512,0,14
+TouchMoveEvent 696,1484,0,11
+TouchMoveEvent 700,1456,0,12
+TouchMoveEvent 704,1426,0,11
+TouchMoveEvent 710,1398,0,13
+TouchMoveEvent 714,1371,0,11
+TouchMoveEvent 718,1345,0,13
+TouchMoveEvent 722,1318,0,11
+TouchMoveEvent 725,1289,0,13
+TouchMoveEvent 729,1260,0,11
+TouchMoveEvent 732,1232,0,13
+TouchMoveEvent 737,1200,0,11
+TouchMoveEvent 741,1168,0,13
+TouchMoveEvent 745,1138,0,12
+TouchMoveEvent 749,1113,0,13
+TouchMoveEvent 753,1090,0,13
+TouchMoveEvent 757,1068,0,10
+TouchMoveEvent 760,1047,0,12
+TouchMoveEvent 762,1028,0,14
+TouchMoveEvent 763,1011,0,10
+TouchMoveEvent 765,993,0,13
+TouchMoveEvent 766,977,0,11
+TouchMoveEvent 768,961,0,13
+TouchMoveEvent 770,947,0,11
+TouchMoveEvent 771,935,0,13
+TouchMoveEvent 772,922,0,12
+TouchMoveEvent 773,910,0,12
+TouchMoveEvent 775,897,0,12
+TouchMoveEvent 777,886,0,12
+TouchMoveEvent 779,876,0,12
+TouchMoveEvent 781,869,0,15
+TouchMoveEvent 784,862,0,9
+TouchMoveEvent 786,855,0,12
+TouchMoveEvent 789,844,0,12
+TouchMoveEvent 791,834,0,13
+TouchMoveEvent 792,825,0,11
+TouchMoveEvent 794,818,0,13
+TouchMoveEvent 795,811,0,11
+TouchMoveEvent 796,805,0,13
+TouchMoveEvent 796,803,0,12
+TouchMoveEvent 796,802,0,12
+TouchMoveEvent 797,800,0,11
+TouchMoveEvent 797,798,0,13
+TouchMoveEvent 798,793,0,11
+TouchMoveEvent 798,790,0,13
+TouchMoveEvent 798,787,0,12
+TouchMoveEvent 799,785,0,12
+TouchMoveEvent 799,784,0,12
+TouchMoveEvent 799,783,0,61
+TouchMoveEvent 800,783,0,59
+TouchMoveEvent 801,783,0,12
+Delay 9492- TickCount()
+ TouchUpEvent 0
+Delay 10448- TickCount()
+ TouchDownEvent 662,1631,0
+Delay 10519- TickCount()
+ TouchUpEvent 0
+Delay 11898- TickCount()
+ TouchDownEvent 787,1095,0
+Delay 11957- TickCount()
+ TouchUpEvent 0
+

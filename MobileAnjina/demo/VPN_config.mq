@@ -1,0 +1,83 @@
+Delay 100 - TickCount()
+KeyPress "Home"
+Delay 300 - TickCount()
+KeyPress "Home"
+
+
+Delay 2670- TickCount()
+ TouchDownEvent 921,1314,0
+Delay 2741- TickCount()
+ TouchUpEvent 0
+Delay 4304- TickCount()
+ TouchDownEvent 181,598,0
+Delay 4331- TickCount()
+ TouchUpEvent 0
+Delay 6178- TickCount()
+ TouchDownEvent 572,1794,0
+Delay 6261- TickCount()
+ TouchUpEvent 0
+ 
+ Delay 7000 - TickCount()
+ TouchDownEvent 500, 400, 0
+ Delay 7100 - TickCount()
+ TouchUpEvent 0
+ 
+Delay 7659- TickCount()
+ TouchDownEvent 636,671,0
+Delay 7710- TickCount()
+ TouchUpEvent 0
+Delay 8869- TickCount()
+ TouchDownEvent 770,399,0
+Delay 8940- TickCount()
+ TouchUpEvent 0
+Delay 10612- TickCount()
+ TouchDownEvent 695,391,0
+Delay 10670- TickCount()
+ TouchUpEvent 0
+
+
+Delay 11500 - TickCount()
+Dim vnpName
+vnpName = File.ReadLine("/sdcard/vpnConfig.txt", 1)
+InputText vnpName
+ 
+Delay 15053- TickCount()
+ TouchDownEvent 704,631,0
+Delay 15125- TickCount()
+ TouchUpEvent 0
+ 
+ 
+ Delay 15500 - TickCount()
+ Dim vnpAdress
+vnpAdress = File.ReadLine("/sdcard/vpnConfig.txt", 2)
+InputText vnpAdress
+ 
+Delay 20384- TickCount()
+ TouchDownEvent 648,805,0
+Delay 20456- TickCount()
+ TouchUpEvent 0
+ 
+  Delay 21500 - TickCount()
+ Dim vpnAccount
+vpnAccount = File.ReadLine("/sdcard/vpnConfig.txt", 3)
+InputText vpnAccount
+ 
+Delay 25129- TickCount()
+ TouchDownEvent 678, 994, 0
+Delay 25192- TickCount()
+ TouchUpEvent 0
+ 
+   Delay 26500 - TickCount()
+ Dim vpnPWD
+vpnPWD = File.ReadLine("/sdcard/vpnConfig.txt", 4)
+InputText vpnPWD
+ 
+Delay 30073- TickCount()
+ TouchDownEvent 587,1860,0
+Delay 30145- TickCount()
+ TouchUpEvent 0
+
+Delay 31000 - TickCount()
+ TouchDownEvent 500, 400, 0
+ Delay 31100 - TickCount()
+ TouchUpEvent 0
