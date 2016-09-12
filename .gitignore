@@ -1,0 +1,9 @@
+/AutoRunner/*.iml
+/AutoRunner/.gradle
+/AutoRunner/local.properties
+/AutoRunner/.idea/workspace.xml
+/AutoRunner/.idea/libraries
+/AutoRunner/.DS_Store
+/AutoRunner/build
+/AutoRunner/captures
+/AutoRunner/app/build
