@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:orientation="horizontal"
+            >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:id="@+id/pkg"
+
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_weight="1"
+                android:id="@+id/getIP"
+                android:text="获取外网IP"
+                />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:id="@+id/getPhoneUtil"
+            android:text="获取数据"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:id="@+id/getOldData"
+            android:text="获取留存"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_weight="1"
+            android:id="@+id/save"
+            android:text="保存"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dip"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IMEI:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/imei"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAC:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/mac"
+            />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="blue_mac:"
+                android:gravity="center_vertical"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:id="@+id/blue_mac"
+                />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AndroidID:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/androidid"
+            />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="imsi:"
+                android:gravity="center_vertical"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                android:id="@+id/imsi"
+                />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="android系统版本:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/osv"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="device制造商:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/dv"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="device型号:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/dm"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="运营商id:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/opid"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分辨率宽:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/sw"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分辨率高:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/sh"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机纬度:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/lat"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机经度:"
+            android:gravity="center_vertical"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:id="@+id/lng"
+            />
+    </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
+
+
+
