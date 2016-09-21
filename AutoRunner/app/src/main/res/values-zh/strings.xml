@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AutoRunner</string>
+    <string name="new_task_activity_title">添加新的执行计划</string>
+</resources>

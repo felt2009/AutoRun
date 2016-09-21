@@ -35,7 +35,7 @@
     <application
         android:name="com.wfx.autorunner.AutoRunApplication"
         android:allowBackup="true"
-		android:sharedUserId="android.uid.system"
+        android:sharedUserId="android.uid.system"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -61,6 +61,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddNewTaskActivity" />
         <!--for test-->
         <!--<activity-->
             <!--android:name=".tester.TestActivity"-->
