@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,25 +19,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wfx.autorunner.R;
-import com.wfx.autorunner.data.AppInfo;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by sean on 9/22/16.
  */
-public class ChooseAppFragment extends Fragment {
-    private final static String TAG = "ChooseAppFragment";
+public class ConfigRunningFragment extends Fragment {
+    private final static String TAG = "ConfigRunningFragment";
     private ProgressBar progressBar;
     private ListView listView;
-    private List<AppInfo> apps;
+    private List<ResolveInfo> apps;
     private PackageManager pm;
-    public static ChooseAppFragment newInstance() {
-        ChooseAppFragment fragment = new ChooseAppFragment();
+    public static ConfigRunningFragment newInstance() {
+        ConfigRunningFragment fragment = new ConfigRunningFragment();
         /*
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -53,13 +48,6 @@ public class ChooseAppFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.app_list);
         progressBar = (ProgressBar) rootView.findViewById(R.id.loading_progress);
         pm = getContext().getPackageManager();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                EventBus.getDefault().post(apps.get(i));
-            }
-        });
         return rootView;
     }
 
@@ -84,13 +72,13 @@ public class ChooseAppFragment extends Fragment {
         }
     }
 
-    private class AppAdapter extends ArrayAdapter<AppInfo> {
-        AppAdapter(Context ctx, List<AppInfo> apps) {
+    private class AppAdapter extends ArrayAdapter<ResolveInfo> {
+        AppAdapter(Context ctx, List<ResolveInfo> apps) {
             super(ctx, R.layout.app_item, apps);
         }
 
         @Override
-        public android.view.View getView(int position, View convertView,
+        public View getView(int position, View convertView,
                                          ViewGroup parent) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(
@@ -102,10 +90,9 @@ public class ChooseAppFragment extends Fragment {
         }
 
         private void bindView(int position, View itemView) {
-            AppInfo info = getItem(position);
             AppViewHolder appViewHolder = (AppViewHolder) itemView.getTag();
-            appViewHolder.appName.setText(info.appName);
-            appViewHolder.appIcon.setImageDrawable(info.appIcon);
+            appViewHolder.appName.setText(getItem(position).loadLabel(pm));
+            appViewHolder.appIcon.setImageDrawable(getItem(position).loadIcon(pm));
         }
     }
 
@@ -123,15 +110,11 @@ public class ChooseAppFragment extends Fragment {
             Log.d(TAG, "GetInstalledAppTask doInBackground");
             try {
                 PackageManager pm = getContext().getPackageManager();
-                Intent main = new Intent(Intent.ACTION_MAIN, null);
+                Intent main=new Intent(Intent.ACTION_MAIN, null);
+
                 main.addCategory(Intent.CATEGORY_LAUNCHER);
-                List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(main, 0);
-                Collections.sort(resolveInfoList, new ResolveInfo.DisplayNameComparator(pm));
-                apps = new ArrayList<>();
-                for (ResolveInfo resolveInfo : resolveInfoList) {
-                    apps.add(new AppInfo(resolveInfo.loadLabel(pm).toString(),
-                            resolveInfo.resolvePackageName, resolveInfo.loadIcon(pm)));
-                }
+                apps = pm.queryIntentActivities(main, 0);
+                Collections.sort(apps, new ResolveInfo.DisplayNameComparator(pm));
             } catch (Exception e) {
                 e.printStackTrace();
             }

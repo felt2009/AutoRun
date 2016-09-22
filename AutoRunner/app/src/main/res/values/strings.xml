@@ -9,4 +9,5 @@
 
     <!-- new task activity -->
     <string name="new_task_activity_title">Add New Task</string>
+    <string name="choose_app_hint">Choose Target App</string>
 </resources>
