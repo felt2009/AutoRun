@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.wfx.autorunner.data.AppInfo;
 import com.wfx.autorunner.fragments.ChooseAppFragment;
+import com.wfx.autorunner.fragments.ConfigRunningFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class AddNewTaskActivity extends AppCompatActivity {
     private final static String TAG = "AddNewTaskActivity";
     private ChooseAppFragment chooseAppFragment;
+    private ConfigRunningFragment configRunningFragment;
     private View chosenApp, hintView;
     private ImageView appIcon;
     private TextView appName;
@@ -63,6 +65,7 @@ public class AddNewTaskActivity extends AppCompatActivity {
         appName.setText(appInfo.appName);
         chosenApp.setVisibility(View.VISIBLE);
         hintView.setVisibility(View.INVISIBLE);
+        showConfigRunningFragment();
     }
 
     @Override
@@ -80,5 +83,14 @@ public class AddNewTaskActivity extends AppCompatActivity {
         }
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, chooseAppFragment).commit();
+    }
+
+    private void showConfigRunningFragment() {
+        if (configRunningFragment == null) {
+            configRunningFragment = ConfigRunningFragment.newInstance();
+        }
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, configRunningFragment).commit();
     }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <RelativeLayout
+        android:id="@+id/config_info_group"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/running_count_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical|left"
+            android:layout_centerVertical="true"
+            android:text="@string/running_count_label" />
+        <EditText android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:inputType="numberDecimal"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/running_count_label"/>
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/script_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/config_info_group"/>
+</RelativeLayout>

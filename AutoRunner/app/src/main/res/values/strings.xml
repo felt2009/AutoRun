@@ -10,4 +10,5 @@
     <!-- new task activity -->
     <string name="new_task_activity_title">Add New Task</string>
     <string name="choose_app_hint">Choose Target App</string>
+    <string name="running_count_label">Set repeat count:</string>
 </resources>

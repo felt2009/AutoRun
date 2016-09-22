@@ -3,4 +3,5 @@
     <string name="app_name">AutoRunner</string>
     <string name="new_task_activity_title">添加新的执行计划</string>
     <string name="choose_app_hint">选择目标应用</string>
+    <string name="running_count_label">设置执行次数</string>
 </resources>
