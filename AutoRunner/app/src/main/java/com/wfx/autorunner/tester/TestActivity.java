@@ -175,67 +175,9 @@ public class TestActivity extends AppCompatActivity {
         return (appInfo.flags & appInfo.FLAG_SYSTEM) > 0;
     }
 
-    private void getInstallJson(){
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,URL_INSTALL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                      if(!TextUtils.isEmpty(response)){
-                          try {
-                              JSONObject jsonObject = new JSONObject(response);
-                               imei = jsonObject.getString("imei");
-                               mac = jsonObject.getString("mac");
-                            blue_mac = jsonObject.getString("blue_mac");
-                               android_id = jsonObject.getString("android_id");
-                               imsi = jsonObject.getInt("imsi")+"";
-                               opid = jsonObject.getInt("opid")+"";
-                               osv = jsonObject.getString("osv");
-                               dv = jsonObject.getString("dv");
-                               dm = jsonObject.getString("dm");
-                               sw = jsonObject.getInt("sw")+"";
-                               sh = jsonObject.getInt("sh")+"";
 
-                              et_imei.setText(imei);
-                              et_mac.setText(mac);
-                              et_blue_mac.setText(blue_mac);
-                              et_androidid.setText(android_id);
-                              et_imsi.setText(imsi);
-                              et_opid.setText(opid);
-                              et_osv.setText(osv);
-                              et_dv.setText(dv);
-                              et_dm.setText(dm);
-                              et_sw.setText(sw);
-                              et_sh.setText(sh);
-                              // FIXME
-                              saveData();
-                          } catch (JSONException e) {
-                              e.printStackTrace();
-                          }
-                      }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("xxx", error.getMessage(), error);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                //在这里设置需要post的参数
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("packagename", "123");
-                params.put("area", "123123");
-                return params;
-            }
-        };
-        requestQueue.add(stringRequest);
-
-    }
 
     private void getOpenJson(){
-
-
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST,URL_OPEN,
                 new Response.Listener<String>() {

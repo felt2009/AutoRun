@@ -15,7 +15,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 /**
- * Created by n000058 on 2016/9/17.
+ * Created by joe on 2016/9/17.
  */
 public class ScriptRunning {
     static String TAG = "ScriptRunning";

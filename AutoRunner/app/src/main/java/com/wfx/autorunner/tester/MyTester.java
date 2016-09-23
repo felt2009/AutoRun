@@ -5,7 +5,7 @@ import com.wfx.autorunner.controller.ScriptRunning;
 import com.wfx.autorunner.core.ScriptInfo;
 
 /**
- * Created by n000058 on 2016/9/17.
+ * Created by joe on 2016/9/17.
  */
 // FIXME Just for testing
 public class MyTester {
