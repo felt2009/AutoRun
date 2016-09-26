@@ -1,6 +1,8 @@
 package com.wfx.autorunner.core;
 
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.wfx.autorunner.xposed.RandomData;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
  * Created by joe on 2016/9/22.
  */
 public class PhoneInfo {
+    static final String TAG = "PhoneInfo";
     // IMEI
     private String imei;
     // Mac Address
@@ -36,17 +39,15 @@ public class PhoneInfo {
     // 手机经度
     private String lng;
 
-    public final static int INVALID = 0;
-    public final static int VALID = 1;
     // 当存储入Preference时，是有效状态，当开始更新或者未获取手机数据时，是无效状态；
-    private int status = INVALID;
+    private boolean valid = false;
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setValid(boolean v) {
+        this.valid = v;
     }
 
-    public int getStatus() {
-        return status;
+    public boolean getValid() {
+        return valid;
     }
 
     public boolean getPhoneInfoFromJson(String jsonString) {
@@ -102,6 +103,17 @@ public class PhoneInfo {
         editor.putString("sw",sw);
         editor.putString("sh", sh);
         editor.apply();
-        status = VALID;
+        valid = true;
+        Log.i(TAG,"Current PhoneInfo " + this.toString());
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("imei = ").append(imei).append("mac = ").append(mac).append("blue_mac = ").append(blue_mac).
+                append("android_id = ").append(android_id).append("imsi = ").append(imsi).append("osv = ").append(osv).
+                append("dv = ").append(dv).append("dm = ").append(dm).append("opid = ").append(opid).
+                append("sw = ").append(sw).append("sh = ").append(sh).append("lat = ").append(lat).
+                append("lng = ").append(lng);
+        return builder.toString();
     }
 }

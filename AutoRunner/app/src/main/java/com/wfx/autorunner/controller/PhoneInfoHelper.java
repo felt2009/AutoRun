@@ -13,7 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.core.PhoneInfo;
-import com.wfx.autorunner.xposed.MyStringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,18 +47,42 @@ public class PhoneInfoHelper {
         return ContextHolder.getContext();
     }
 
+    public PhoneInfo getPhoneInfo() {
+        return phoneInfo;
+    }
+
+    public boolean waitPhoneInfoValid(int seconds) {
+        if(seconds < 0 || seconds > 20) {
+            seconds = 20;
+        }
+        for(int i = 0 ; i < seconds ; i++) {
+            if(phoneInfo.getValid()) {
+                Log.i(TAG, "Get Phone info after " + i*1000 + " Seconds.");
+                return true;
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Log.i(TAG, "Cannot get Phoneinfo, something wrong, maybe network problem.");
+        return false;
+    }
+
     // 从网络中获取手机信息；
-    public void generatePhoneInfo(int type) {
-        phoneInfo.setStatus(PhoneInfo.INVALID);
+    public void generatePhoneInfo(String packageName, String area, int type) {
+        phoneInfo.setValid(false);
         if(type == TYPE_OPEN) {
-            getPhoneInfos(URL_OPEN);
+            generatePhoneInfoInteral(packageName, area, URL_OPEN);
         } else if(type == TYPE_INSTALL) {
-            getPhoneInfos(URL_INSTALL);
+            generatePhoneInfoInteral(packageName, area, URL_INSTALL);
         }
     }
 
     // 从指定的URL地址获取设备信息；
-    public void getPhoneInfos(String url){
+    private void generatePhoneInfoInteral(final String packageName, final String area, String url){
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
                 new Response.Listener<String>() {
@@ -83,8 +106,8 @@ public class PhoneInfoHelper {
             protected Map<String, String> getParams() {
                 //在这里设置需要post的参数 TODO test code
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("packagename", "123");
-                params.put("area", "123123");
+                params.put("packagename", packageName);
+                params.put("area", area);
                 return params;
             }
         };

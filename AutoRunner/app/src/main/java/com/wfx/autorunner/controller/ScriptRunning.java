@@ -34,6 +34,15 @@ public class ScriptRunning {
         return false;
     }
 
+    public void prepare() {
+        if(scriptInfo != null) {
+            killRunningPackageWithShell(scriptInfo.getScriptPackageName());
+            sleep(1000);
+            killRunningPackageWithShell(scriptInfo.getTargetPackageName());
+            sleep(2000);
+        }
+    }
+
     // 取得root权限；
     private void requestSu() {
         try {
@@ -86,21 +95,17 @@ public class ScriptRunning {
     }
 
     // 执行脚本, 返回值 true 正常执行， false，没有执行；
-    private boolean runScript(String scriptPackage, String testPackage,int runningTime) {
-        killRunningPackageWithShell(testPackage);
-        sleep(1000);
-        killRunningPackageWithShell(scriptPackage);
-        sleep(2000);
+    private boolean runScript(String scriptPackage, String targetPackage,int runningTime) {
         runPackage(scriptPackage);
         sleep(8000);
         runVolumeDownKey();
         sleep(3000);
-        runPackage(testPackage);
+        runPackage(targetPackage);
         sleep(5000);
-        if(isAppInFront(testPackage)) {
-            Log.i(TAG, "test Package is in front " + testPackage);
+        if(isAppInFront(targetPackage)) {
+            Log.i(TAG, "test Package is in front " + targetPackage);
         } else {
-            Log.i(TAG, "test Package is not in Front " + testPackage);
+            Log.i(TAG, "test Package is not in Front " + targetPackage);
             return false;
         }
         sleep(runningTime);

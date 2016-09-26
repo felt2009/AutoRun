@@ -93,7 +93,8 @@ public class TestActivity extends AppCompatActivity {
 //                getIP("http://1212.ip138.com/ic.asp");
 //                ScriptRunning util = new ScriptRunning();
 //                util.runTestFlow();
-                myTester.testRunScript();
+//                myTester.testRunScript();
+                myTester.testRunPlan();
             }
         });
         getOldData =(Button)findViewById(R.id.getOldData);
