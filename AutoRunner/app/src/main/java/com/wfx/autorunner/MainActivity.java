@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,15 +14,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.alibaba.fastjson.JSON;
+import com.wfx.autorunner.core.Environment;
+import com.wfx.autorunner.core.Script;
+import com.wfx.autorunner.network.ScriptResponse;
+import com.wfx.autorunner.network.ServerApiManager;
+
+import org.json.JSONObject;
+
+import java.security.acl.Group;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private TextView demoText, scriptText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        demoText = (TextView) findViewById(R.id.demo_text);
+        scriptText = (TextView) findViewById(R.id.script_text);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -40,6 +54,39 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        // TODO: test only
+        ServerApiManager.instance().fetchEnvironmentInfo(new ServerApiManager.Listener() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onFinished(boolean success, JSONObject response) {
+                Log.d("SEAN", "onFinished:" + response.toString());
+                Environment environment = JSON.parseObject(response.toString(), Environment.class);
+                Log.d("SEAN", "onFinished:" + environment.toString());
+                demoText.setText(environment.toString());
+            }
+        }, "com.lionmobi.battery", "南京", "fetchEnvironment_com.lionmobi.battery");
+
+        ServerApiManager.instance().fetchScriptInfo(new ServerApiManager.Listener() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onFinished(boolean success, JSONObject response) {
+                Log.d("SEAN", "onFinished:" + response.toString());
+                ScriptResponse scriptResponse = JSON.parseObject(response.toString(), ScriptResponse.class);
+                Log.d("SEAN", "code:" + scriptResponse.getCode() + ", msg:" + scriptResponse.getMsg().size());
+                for (Script script: scriptResponse.getMsg()) {
+                    Log.d("SEAN", "script:" + script.getScriptName() + ", time:" + script.getTime()
+                            + ", type:" + script.getType());
+                }
+            }
+        }, "com.lionmobi.battery", ServerApiManager.ScriptType.TYPE_ACTIVATE, "fetchScript_com.lionmobi.battery");
     }
 
     @Override
