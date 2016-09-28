@@ -62,6 +62,7 @@
             </intent-filter>
         </activity>
        <activity android:name=".AddNewTaskActivity" />
+        <activity android:name=".ChooseAppActivity" />
         <!--
         <activity
             android:name=".tester.TestActivity"

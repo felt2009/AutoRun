@@ -4,33 +4,37 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-
-import com.wfx.autorunner.data.AppInfo;
-import com.wfx.autorunner.fragments.ConfigRunningFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import com.wfx.autorunner.fragments.ChooseAppFragment;
 
 /**
  * Created by sean on 9/22/16.
  */
-public class AddNewTaskActivity extends AppCompatActivity {
-    private final static String TAG = "AddNewTaskActivity";
-    private ConfigRunningFragment configRunningFragment;
+public class ChooseAppActivity extends AppCompatActivity {
+    private final static String TAG = "ChooseAppActivity";
+    private ChooseAppFragment chooseAppFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_task);
+        setContentView(R.layout.activity_choose_app);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.new_task_activity_title);
+            actionBar.setTitle(R.string.choose_app_activity_title);
         }
-        showConfigRunningFragment();
+        showChooseAppFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -42,12 +46,11 @@ public class AddNewTaskActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void showConfigRunningFragment() {
-        if (configRunningFragment == null) {
-            configRunningFragment = ConfigRunningFragment.newInstance();
+    private void showChooseAppFragment() {
+        if (chooseAppFragment == null) {
+            chooseAppFragment = ChooseAppFragment.newInstance();
         }
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, configRunningFragment).commit();
+                .replace(R.id.fragment_container, chooseAppFragment).commit();
     }
 }

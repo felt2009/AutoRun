@@ -6,9 +6,66 @@
     android:background="@android:color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <RelativeLayout
+        android:id="@+id/chosen_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:clickable="true">
+        <ImageView android:id="@+id/icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_margin="4dp"
+            android:src="@android:drawable/sym_def_app_icon"/>
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/icon"
+            android:textSize="18sp"
+            android:layout_centerVertical="true"
+            android:text="@string/app_name_hint"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/scrip_info"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@id/chosen_app"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/script_spinner_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical|left"
+            android:text="@string/script_hint" />
+        <Spinner
+            android:id="@+id/scrip_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/script_spinner_label"/>
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/retry_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/script_spinner_label"
+            android:text="@string/btn_retry" />
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_below="@id/retry_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center_vertical|left" />
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/config_info_group"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_below="@id/scrip_info"
         android:padding="16dp">
         <TextView
             android:id="@+id/running_count_label"
@@ -23,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:inputType="numberDecimal"
+            android:focusableInTouchMode="true"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/running_count_label"/>
     </RelativeLayout>

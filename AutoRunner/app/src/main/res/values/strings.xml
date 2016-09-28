@@ -11,4 +11,10 @@
     <string name="new_task_activity_title">Add New Task</string>
     <string name="choose_app_hint">Choose Target App</string>
     <string name="running_count_label">Set repeat count:</string>
+    <string name="app_name_hint">Click to choose target app</string>
+    <string name="script_hint">Choose script</string>
+    <string name="btn_retry">Sync</string>
+    <string name="error_message">Failed to get script</string>
+
+    <string name="choose_app_activity_title">Choose Target App</string>
 </resources>

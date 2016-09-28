@@ -58,6 +58,7 @@ public class ChooseAppFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 EventBus.getDefault().post(apps.get(i));
+                getActivity().finish();
             }
         });
         return rootView;
@@ -129,6 +130,7 @@ public class ChooseAppFragment extends Fragment {
                 Collections.sort(resolveInfoList, new ResolveInfo.DisplayNameComparator(pm));
                 apps = new ArrayList<>();
                 for (ResolveInfo resolveInfo : resolveInfoList) {
+                    Log.d(TAG, "GetInstalledAppTask doInBackground packageName:" + resolveInfo.resolvePackageName);
                     apps.add(new AppInfo(resolveInfo.loadLabel(pm).toString(),
                             resolveInfo.resolvePackageName, resolveInfo.loadIcon(pm)));
                 }

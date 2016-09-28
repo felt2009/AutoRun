@@ -3,8 +3,6 @@ package com.wfx.autorunner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,16 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.alibaba.fastjson.JSON;
-import com.wfx.autorunner.core.Environment;
-import com.wfx.autorunner.core.Script;
-import com.wfx.autorunner.network.ScriptResponse;
-import com.wfx.autorunner.network.ServerApiManager;
-
-import org.json.JSONObject;
-
-import java.security.acl.Group;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,6 +44,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        /*
         // TODO: test only
         ServerApiManager.instance().fetchEnvironmentInfo(new ServerApiManager.Listener() {
             @Override
@@ -87,6 +76,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }, "com.lionmobi.battery", ServerApiManager.ScriptType.TYPE_ACTIVATE, "fetchScript_com.lionmobi.battery");
+        */
     }
 
     @Override
