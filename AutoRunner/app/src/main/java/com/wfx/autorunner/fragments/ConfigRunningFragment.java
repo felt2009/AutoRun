@@ -4,11 +4,17 @@ package com.wfx.autorunner.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +42,8 @@ public class ConfigRunningFragment extends Fragment {
     private ImageView appIcon;
     private TextView appName, errorMessage;
     private Spinner scriptSpinner;
+    private AppCompatButton btnConfirm;
+    private EditText repeatCountEdit;
     private View targetAppView;
     private List<Script> scripts;
 
@@ -81,6 +89,7 @@ public class ConfigRunningFragment extends Fragment {
             scriptSpinner.setAdapter(null);
             errorMessage.setText(R.string.error_message);
         }
+        updateConfirmButton();
     }
 
     @Subscribe
@@ -92,6 +101,7 @@ public class ConfigRunningFragment extends Fragment {
         appName.setText(chosenAppInfo.appName);
 
         syncScriptInfo();
+        updateConfirmButton();
     }
 
     private void syncScriptInfo() {
@@ -128,7 +138,7 @@ public class ConfigRunningFragment extends Fragment {
                     EventBus.getDefault().post(new OnGetScriptEvent(false));
                 }
             }
-        }, chosenAppInfo.packageName, ServerApiManager.ScriptType.TYPE_ACTIVATE,
+        }, chosenAppInfo.packageName, ServerApiManager.ScriptType.TYPE_ALL,
                 chosenAppInfo.packageName);
     }
 
@@ -147,6 +157,31 @@ public class ConfigRunningFragment extends Fragment {
                 syncScriptInfo();
             }
         });
+        btnConfirm = (AppCompatButton) rootView.findViewById(R.id.confirm);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: add new task
+            }
+        });
+        repeatCountEdit = (EditText) rootView.findViewById(R.id.repeat_count);
+        repeatCountEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d(TAG, "onTextChanged:" + charSequence.toString() +
+                        ", repeatCountEdit:" + repeatCountEdit.getText());
+                updateConfirmButton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         targetAppView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,5 +190,11 @@ public class ConfigRunningFragment extends Fragment {
         });
         EventBus.getDefault().register(this);
         return rootView;
+    }
+
+    private void updateConfirmButton() {
+        btnConfirm.setEnabled(chosenAppInfo != null && scripts != null && scripts.size() > 0 &&
+                !TextUtils.isEmpty(repeatCountEdit.getText()) &&
+                TextUtils.isDigitsOnly(repeatCountEdit.getText()));
     }
 }

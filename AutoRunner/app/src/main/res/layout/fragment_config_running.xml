@@ -76,7 +76,9 @@
             android:gravity="center_vertical|left"
             android:layout_centerVertical="true"
             android:text="@string/running_count_label" />
-        <EditText android:layout_width="72dp"
+        <EditText
+            android:id="@+id/repeat_count"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:inputType="numberDecimal"
@@ -84,9 +86,11 @@
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@id/running_count_label"/>
     </RelativeLayout>
-    <ListView
-        android:id="@+id/script_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/config_info_group"/>
+    <android.support.v7.widget.AppCompatButton
+        android:layout_margin="16dp"
+        android:id="@+id/confirm" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:enabled="false"
+        android:text="@string/btn_confirm" />
 </RelativeLayout>

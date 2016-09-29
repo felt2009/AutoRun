@@ -126,13 +126,14 @@ public class ChooseAppFragment extends Fragment {
                 PackageManager pm = getContext().getPackageManager();
                 Intent main = new Intent(Intent.ACTION_MAIN, null);
                 main.addCategory(Intent.CATEGORY_LAUNCHER);
-                List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(main, 0);
+                List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(main,
+                        0);
                 Collections.sort(resolveInfoList, new ResolveInfo.DisplayNameComparator(pm));
                 apps = new ArrayList<>();
                 for (ResolveInfo resolveInfo : resolveInfoList) {
-                    Log.d(TAG, "GetInstalledAppTask doInBackground packageName:" + resolveInfo.resolvePackageName);
+                    Log.d(TAG, "GetInstalledAppTask doInBackground packageName:" + resolveInfo.activityInfo.packageName);
                     apps.add(new AppInfo(resolveInfo.loadLabel(pm).toString(),
-                            resolveInfo.resolvePackageName, resolveInfo.loadIcon(pm)));
+                            resolveInfo.activityInfo.packageName, resolveInfo.loadIcon(pm)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

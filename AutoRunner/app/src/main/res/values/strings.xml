@@ -17,4 +17,5 @@
     <string name="error_message">Failed to get script</string>
 
     <string name="choose_app_activity_title">Choose Target App</string>
+    <string name="btn_confirm">Confirm</string>
 </resources>
