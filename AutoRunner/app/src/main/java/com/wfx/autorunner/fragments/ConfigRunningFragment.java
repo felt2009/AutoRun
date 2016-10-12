@@ -22,7 +22,10 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.wfx.autorunner.ChooseAppActivity;
 import com.wfx.autorunner.R;
+import com.wfx.autorunner.controller.PlanHelper;
+import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
+import com.wfx.autorunner.core.TaskEntry;
 import com.wfx.autorunner.data.AppInfo;
 import com.wfx.autorunner.network.ScriptResponse;
 import com.wfx.autorunner.network.ServerApiManager;
@@ -162,6 +165,18 @@ public class ConfigRunningFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO: add new task
+                // All the scripts should be run, no need choose one script;
+                if(scripts.size() > 0 && chosenAppInfo != null) {
+                    final int count = Integer.parseInt(repeatCountEdit.getText().toString());
+                    Thread thread=new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            PlanInfo planInfo = PlanHelper.generatePlan(chosenAppInfo.packageName, scripts, count);
+                            PlanHelper.runPlan(planInfo);
+                        }
+                    });
+                    thread.start();
+                }
             }
         });
         repeatCountEdit = (EditText) rootView.findViewById(R.id.repeat_count);

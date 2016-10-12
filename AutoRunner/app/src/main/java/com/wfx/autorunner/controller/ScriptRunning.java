@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.wfx.autorunner.ContextHolder;
+import com.wfx.autorunner.core.Script;
 import com.wfx.autorunner.core.ScriptInfo;
 
 import java.io.DataOutputStream;
@@ -21,24 +22,33 @@ public class ScriptRunning {
     static String TAG = "ScriptRunning";
     private Process process;
 
-    private ScriptInfo scriptInfo;
+    private Script script;
+    private String targetPackageName;
+    public void setScript(Script script) {
+        this.script = script;
+    }
 
-    public void setScriptInfo(ScriptInfo scriptInfo) {
-        this.scriptInfo = scriptInfo;
+    public String getTargetPackageName() {
+        return targetPackageName;
+    }
+
+    public void setTargetPackageName(String targetPackageName) {
+        this.targetPackageName = targetPackageName;
     }
 
     public boolean runScript() {
-        if(scriptInfo != null) {
-            return runScript(scriptInfo.getScriptPackageName(),scriptInfo.getTargetPackageName(),scriptInfo.getRunningTime());
+        if(script != null) {
+            return runScript(script.getScriptName(),targetPackageName,script.getTime());
         }
         return false;
     }
 
     public void prepare() {
-        if(scriptInfo != null) {
-            killRunningPackageWithShell(scriptInfo.getScriptPackageName());
+        Log.i(TAG, "prepare");
+        if(script != null) {
+            killRunningPackageWithShell(script.getScriptName());
             sleep(1000);
-            killRunningPackageWithShell(scriptInfo.getTargetPackageName());
+            killRunningPackageWithShell(targetPackageName);
             sleep(2000);
         }
     }
@@ -96,6 +106,7 @@ public class ScriptRunning {
 
     // 执行脚本, 返回值 true 正常执行， false，没有执行；
     private boolean runScript(String scriptPackage, String targetPackage,int runningTime) {
+        Log.i(TAG, "runScript run time is " + runningTime);
         runPackage(scriptPackage);
         sleep(8000);
         runVolumeDownKey();
@@ -108,19 +119,19 @@ public class ScriptRunning {
             Log.i(TAG, "test Package is not in Front " + targetPackage);
             return false;
         }
-        sleep(runningTime);
+        sleep(runningTime * 1000);
         return true;
     }
 
     // 获取要执行的脚本包名 TODO
-    private String getTestScriptPackage() {
-        return "com.ngmlmemjmpmcnimlme.drivea";
-    }
+//    private String getTestScriptPackage() {
+//        return "com.ngmlmemjmpmcnimlme.drivea";
+//    }
 
     // 获取测试Apk的包名 TODO
-    private String getTestPackage() {
-        return "com.handsgo.jiakao.android";
-    }
+//    private String getTestPackage() {
+//        return "com.handsgo.jiakao.android";
+//    }
     // 执行APK
     private void runPackage(String packageName) {
         Log.i(TAG, packageName);
@@ -184,41 +195,41 @@ public class ScriptRunning {
     }
 
     // FIXME just for test need remove;
-    public void runTestFlow() {
-        Thread thread=new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                downloadScripts();
-                installScripts();
-                getPhoneInfo();
-                getVPNInfo();
-                setVPN();
-                // TODO Just for test;
-                int wrong = 0;
-                int count = 30;
-                for(int i = 0 ; i < count ; i++) {
-                    Log.i(TAG, "Total time is " + count + " time is " + i + " total is " + count);
-                    if(runScript(getTestScriptPackage(), getTestPackage(),40000)) {
-                        Log.i(TAG, "Run well");
-                    } else {
-                        wrong++;
-                        i--;
-                        Log.i(TAG, "Error, need Run again");
-                        Log.i(TAG, "Total time is " + count + " " + wrong + " times not run");
-                        if(count < wrong * 3) {
-                            Log.e(TAG, "Too many wrong running, stop running");
-                            Log.e(TAG, "Total time is " + count + " " + wrong + " times not run");
-                            break;
-                        }
-                    }
-                }
-                Log.i(TAG, "Total time is " + count + " " + wrong + " times not run");
-            }
-        });
-        thread.start();
-    }
+//    public void runTestFlow() {
+//        Thread thread=new Thread(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                downloadScripts();
+//                installScripts();
+//                getPhoneInfo();
+//                getVPNInfo();
+//                setVPN();
+//                // TODO Just for test;
+//                int wrong = 0;
+//                int count = 30;
+//                for(int i = 0 ; i < count ; i++) {
+//                    Log.i(TAG, "Total time is " + count + " time is " + i + " total is " + count);
+//                    if(runScript(getTestScriptPackage(), getTestPackage(),40000)) {
+//                        Log.i(TAG, "Run well");
+//                    } else {
+//                        wrong++;
+//                        i--;
+//                        Log.i(TAG, "Error, need Run again");
+//                        Log.i(TAG, "Total time is " + count + " " + wrong + " times not run");
+//                        if(count < wrong * 3) {
+//                            Log.e(TAG, "Too many wrong running, stop running");
+//                            Log.e(TAG, "Total time is " + count + " " + wrong + " times not run");
+//                            break;
+//                        }
+//                    }
+//                }
+//                Log.i(TAG, "Total time is " + count + " " + wrong + " times not run");
+//            }
+//        });
+//        thread.start();
+//    }
 
     // Swipe to Next screen Not use here TODO
     private void SwipeToNextScreen() {

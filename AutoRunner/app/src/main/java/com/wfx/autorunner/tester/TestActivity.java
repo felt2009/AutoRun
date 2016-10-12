@@ -82,7 +82,7 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                getInstallJson();
-                myTester.testRunOpenedPhoneInfo();
+//                myTester.testRunOpenedPhoneInfo();
 //                PhoneInfoHelper.getInstance().generatePhoneInfo(PhoneInfoHelper.TYPE_INSTALL);
             }
         });
@@ -94,7 +94,7 @@ public class TestActivity extends AppCompatActivity {
 //                ScriptRunning util = new ScriptRunning();
 //                util.runTestFlow();
 //                myTester.testRunScript();
-                myTester.testRunPlan();
+//                myTester.testRunPlan();
             }
         });
         getOldData =(Button)findViewById(R.id.getOldData);

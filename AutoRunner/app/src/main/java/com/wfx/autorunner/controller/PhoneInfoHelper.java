@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -12,7 +13,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wfx.autorunner.ContextHolder;
+import com.wfx.autorunner.core.Environment;
 import com.wfx.autorunner.core.PhoneInfo;
+import com.wfx.autorunner.network.ServerApiManager;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +27,9 @@ import java.util.Map;
  */
 public class PhoneInfoHelper {
     static String TAG = "PhoneInfoHelper";
-    // installed URL 留存？
-    private static final String URL_INSTALL ="http://106.75.148.113:80/v1/install";
-    // open URL 新用户？
-    private static final String URL_OPEN ="http://106.75.148.113:80/v1/open";
 
-    public final static int TYPE_OPEN = 1;
-    public final static int TYPE_INSTALL = 2;
+    public final static int TYPE_OPEN = 0;
+    public final static int TYPE_INSTALL = 1;
     private SharedPreferences preferences;
     private String strIP,strIntentAddress;
 
@@ -75,43 +76,38 @@ public class PhoneInfoHelper {
     public void generatePhoneInfo(String packageName, String area, int type) {
         phoneInfo.setValid(false);
         if(type == TYPE_OPEN) {
-            generatePhoneInfoInteral(packageName, area, URL_OPEN);
+            generateOpenedPhoneInfoInteral(packageName, area);
         } else if(type == TYPE_INSTALL) {
-            generatePhoneInfoInteral(packageName, area, URL_INSTALL);
+            generateRetentionPhoneInfo(packageName, area);
         }
     }
 
-    // 从指定的URL地址获取设备信息；
-    private void generatePhoneInfoInteral(final String packageName, final String area, String url){
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(!TextUtils.isEmpty(response)){
-                            phoneInfo.getPhoneInfoFromJson(response);
-                            preferences = getContext().getSharedPreferences("prefs",
-                                    Context.MODE_WORLD_READABLE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            phoneInfo.updatePreference(editor);
-                        }
-                    }
-                }, new Response.ErrorListener() {
+    private void generateOpenedPhoneInfoInteral(final String packageName, final String area){
+        ServerApiManager.instance().fetchEnvironmentInfo(new ServerApiManager.Listener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.getMessage(), error);
+            public void onStart() {
             }
-        }) {
+
             @Override
-            protected Map<String, String> getParams() {
-                //在这里设置需要post的参数 TODO test code
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("packagename", packageName);
-                params.put("area", area);
-                return params;
+            public void onFinished(boolean success, JSONObject response) {
+                Log.d("SEAN", "onFinished:" + response.toString());
+                Environment environment = JSON.parseObject(response.toString(), Environment.class);
             }
-        };
-        requestQueue.add(stringRequest);
+        }, packageName, area, "fetchEnveironment_"+packageName);
+    }
+
+    private void generateRetentionPhoneInfo(final String packageName, final String area){
+        ServerApiManager.instance().fetchRetentionInfo(new ServerApiManager.Listener() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onFinished(boolean success, JSONObject response) {
+                Log.d("SEAN", "onFinished:" + response.toString());
+                Environment environment = JSON.parseObject(response.toString(), Environment.class);
+            }
+        }, packageName, area, "fetchRetention_"+packageName);
     }
 
 //    public void getIP(String paramString){

@@ -3,6 +3,7 @@ package com.wfx.autorunner.core;
 /**
  * Created by sean on 9/13/16.
  */
+// ToDO need remove;
 public class ScriptInfo {
     public final static int CATEGORY_RETENTION = 0;
     public final static int CATEGORY_FIRST_LAUNCH = 1;

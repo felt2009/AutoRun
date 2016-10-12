@@ -10,6 +10,8 @@ import org.json.JSONObject;
 /**
  * Created by joe on 2016/9/22.
  */
+
+// TODO need remove
 public class PhoneInfo {
     static final String TAG = "PhoneInfo";
     // IMEI
