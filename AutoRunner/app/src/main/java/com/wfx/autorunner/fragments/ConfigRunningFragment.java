@@ -3,6 +3,9 @@ package com.wfx.autorunner.fragments;
 
 //import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
@@ -10,7 +13,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +22,16 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.wfx.autorunner.ChooseAppActivity;
+import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.R;
 import com.wfx.autorunner.controller.PhoneInfoHelper;
 import com.wfx.autorunner.controller.PlanHelper;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
-import com.wfx.autorunner.core.TaskEntry;
 import com.wfx.autorunner.data.AppInfo;
 import com.wfx.autorunner.network.ScriptResponse;
 import com.wfx.autorunner.network.ServerApiManager;
@@ -173,6 +176,12 @@ public class ConfigRunningFragment extends Fragment {
                 // TODO: add new task
                 // All the scripts should be run, no need choose one script;
                 if(scripts.size() > 0 && chosenAppInfo != null) {
+                    if(!updateScripts(scripts)) {
+                        // Show Message, no insatalled script;
+                        Toast.makeText(ContextHolder.getContext(),ContextHolder.getContext().getString(R.string.no_script_package), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     final int count = Integer.parseInt(repeatCountEdit.getText().toString());
                     Thread thread=new Thread(new Runnable() {
                         @Override
@@ -180,7 +189,6 @@ public class ConfigRunningFragment extends Fragment {
                             // install FIXME type 只能是留存或者激活，依据界面的选择;
                             int type = PhoneInfoHelper.TYPE_INSTALL; //  FIXME
                             int id = rGroup.getCheckedRadioButtonId();
-                            Log.i(TAG, "xxxxxxxxxxxx " + id);
                             if(id == R.id.rg_new)
                                 type = PhoneInfoHelper.TYPE_INSTALL;
                             else
@@ -220,6 +228,32 @@ public class ConfigRunningFragment extends Fragment {
         });
         EventBus.getDefault().register(this);
         return rootView;
+    }
+
+    private boolean updateScripts(List<Script> scs) {
+        for(int i = scs.size() - 1; i >= 0; i--) {
+            Script sc = scs.get(i);
+            if(! scriptInstalled(sc.getScriptName())) {
+                scs.remove(i);
+            }
+        }
+        if(scs.size() > 0)
+            return true;
+        return false;
+    }
+
+    private boolean scriptInstalled(String packageName) {
+        if (packageName == null || "".equals(packageName))
+            return false;
+        final PackageManager packageManager = ContextHolder.getContext().getPackageManager();
+        // 获取所有已安装程序的包信息
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        for ( int i = 0; i < pinfo.size(); i++ )
+        {
+            if(pinfo.get(i).packageName.equalsIgnoreCase(packageName))
+                return true;
+        }
+        return false;
     }
 
     private void updateConfirmButton() {
