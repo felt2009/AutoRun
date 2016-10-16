@@ -1,0 +1,69 @@
+Sub main
+	call miguScript1()
+End Sub
+
+Sub miguScript1
+	Delay 10000
+//	RunApp "com.cmcc.cmvideo"
+//		TracePrint "111"
+	Call RandomMoveScreen()
+	TracePrint "111"
+	Delay 2000
+	Call WatchMovie()
+	// Move back
+	TracePrint "2"
+	Delay 2000
+//	Call MoveBack()
+//	TracePrint "3"
+//	Delay 2000
+End Sub
+Sub WatchMovie
+	Delay 3000
+	Call RandomMoveAndTouch()
+	Delay 5000
+	Tap 30, 69
+	Delay 2000
+End Sub
+
+Sub MoveToNextScreen
+	Dim Y = random(700, 800)
+	Swipe random(300, 400), Y+random(1,10), random(100, 200), Y+random(5,15)
+	Delay 1000
+End Sub
+
+Sub MoveBack
+	Dim i
+	For i = 0 To 5
+		Swipe 178, 300, 407, 300
+		Delay 1000
+	Next
+End Sub
+
+Function RandomMoveScreen
+	Dim i
+	For i = 0 To random(1,5)
+		MoveToNextScreen
+	Next
+End Function
+
+Function RandomMoveAndTouch
+	Dim i
+	For i = 1 To random(3, 5)
+		上下滑动 
+		Tap random(200,300), random(200,300)
+	Next
+End Function
+
+
+Sub 上下滑动
+	Swipe 387, 227, 387, 158
+	Delay 1000
+End Sub
+
+Function random(from,too) 
+	Randomize  
+	random = Int((too - from + 1) * Rnd() + from)
+	
+End Function
+
+Call main()	
