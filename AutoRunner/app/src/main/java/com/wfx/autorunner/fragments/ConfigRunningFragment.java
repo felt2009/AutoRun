@@ -52,6 +52,7 @@ public class ConfigRunningFragment extends Fragment {
     private TextView appName, errorMessage;
     private Spinner scriptSpinner;
     private AppCompatButton btnConfirm;
+    private AppCompatButton btnStop;
     private EditText repeatCountEdit;
     private View targetAppView;
     private List<Script> scripts;
@@ -199,7 +200,16 @@ public class ConfigRunningFragment extends Fragment {
                         }
                     });
                     thread.start();
+                    btnStop.setEnabled(true);  // FIXME
                 }
+            }
+        });
+        btnStop = (AppCompatButton) rootView.findViewById(R.id.stop);
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO
+                PlanHelper.stopRun();
             }
         });
         repeatCountEdit = (EditText) rootView.findViewById(R.id.repeat_count);

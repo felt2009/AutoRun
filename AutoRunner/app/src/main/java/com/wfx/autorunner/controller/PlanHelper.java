@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class PlanHelper {
     static private String TAG = "PlanHelper";
+    static boolean bStop = false;
 
     static public PlanInfo generatePlan(String targetPackageName, List<Script> scripts, int totalCount, int type) {
         List<TaskEntry> entryList = new ArrayList<TaskEntry>();
@@ -44,7 +45,8 @@ public class PlanHelper {
         Log.i(TAG, "running" + planInfo.getTasks().get(0).toString());
         ScriptRunning running = new ScriptRunning();
         TaskEntry entry = planInfo.getNextTaskEntry();
-        while (entry != null) {
+        bStop = false;
+        while (entry != null && !bStop) {
             running.setScript(entry.getScript());
             running.setTargetPackageName(entry.getTargetPackageName());
 
@@ -58,5 +60,9 @@ public class PlanHelper {
             }
             entry = planInfo.getNextTaskEntry();
         }
+    }
+
+    static public void stopRun() {
+        bStop = true;
     }
 }
