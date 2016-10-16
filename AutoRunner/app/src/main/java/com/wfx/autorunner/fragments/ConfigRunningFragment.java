@@ -1,6 +1,7 @@
 package com.wfx.autorunner.fragments;
 
 
+//import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.wfx.autorunner.ChooseAppActivity;
 import com.wfx.autorunner.R;
+import com.wfx.autorunner.controller.PhoneInfoHelper;
 import com.wfx.autorunner.controller.PlanHelper;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
@@ -171,7 +173,9 @@ public class ConfigRunningFragment extends Fragment {
                     Thread thread=new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            PlanInfo planInfo = PlanHelper.generatePlan(chosenAppInfo.packageName, scripts, count);
+                            // install FIXME type 只能是留存或者激活，依据界面的选择;
+                            int type = PhoneInfoHelper.TYPE_OPEN; //  FIXME
+                            PlanInfo planInfo = PlanHelper.generatePlan(chosenAppInfo.packageName, scripts, count, type);
                             PlanHelper.runPlan(planInfo);
                         }
                     });

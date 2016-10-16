@@ -21,7 +21,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 public class MainHook implements IXposedHookLoadPackage {
 
     private XSharedPreferences pre;
-    private String thisPackageName = "";
+    private String thisPackageName = "com.wfx.autorunner";
     static String TAG = "MainHook";
 
     @Override
@@ -39,7 +39,6 @@ public class MainHook implements IXposedHookLoadPackage {
 
     private void readData(XC_LoadPackage.LoadPackageParam loadPackageParam) {
 
-        thisPackageName = this.getClass().getPackage().getName();//获取当前包名；
         pre = new XSharedPreferences(thisPackageName, "prefs");
         String ks[] = {"imei", "mac", "bluemac", "androidid", "osv", "dv", "dm", "opid", "sw", "sh", "lat", "lng"};
         HashMap<String, String> maps = new HashMap<String, String>();
@@ -180,7 +179,7 @@ public class MainHook implements IXposedHookLoadPackage {
                 Log.e(TAG, "Exit because result.Length = null");
                 return;
             }
-            Log.e(TAG, "Good here " + type);
+            Log.e(TAG, "Good here " + type + method);
             if (type == 4) {
 
                 // 修改android_id
@@ -190,7 +189,8 @@ public class MainHook implements IXposedHookLoadPackage {
                             protected void afterHookedMethod(
                                     MethodHookParam param) throws Throwable {
                                 String aid = (String) result;
-                                Log.e(TAG, "at hook method " + type);
+
+                                Log.e(TAG, "at hook method " + type + param.method.getName());
                                 if (param.args.length >= 2
                                         && param.args[1] == "android_id"
                                         && aid.length() > 0) {
@@ -215,7 +215,10 @@ public class MainHook implements IXposedHookLoadPackage {
                                 param.setResult(Double.valueOf(result + ""));
                                 break;
                             case 1:
-                                Log.e(TAG, "Good here 1 " + result);
+//                                Log.e(TAG, "Good here 1 " + result + " param.args[0] " + param.args[0].toString() + " param is  "
+//                                        + param.toString() + " Method  " + param.method.toString());
+                                Log.e(TAG, "Good here 1 " + result + " param is  "
+                                        + param.toString() + " Method  " + param.method.toString());
                                 param.setResult(result);
                                 break;
                             case 2:

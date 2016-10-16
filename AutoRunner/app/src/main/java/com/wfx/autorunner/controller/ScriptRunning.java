@@ -112,13 +112,13 @@ public class ScriptRunning {
         runVolumeDownKey();
         sleep(3000);
         runPackage(targetPackage);
-        sleep(5000);
-        if(isAppInFront(targetPackage)) {
-            Log.i(TAG, "test Package is in front " + targetPackage);
-        } else {
-            Log.i(TAG, "test Package is not in Front " + targetPackage);
-            return false;
-        }
+//        sleep(10000);
+//        if(isAppInFront(targetPackage)) {
+//            Log.i(TAG, "test Package is in front " + targetPackage);
+//        } else {
+//            Log.i(TAG, "test Package is not in Front " + targetPackage);
+//            return false;
+//        }
         sleep(runningTime * 1000);
         return true;
     }
@@ -153,7 +153,7 @@ public class ScriptRunning {
         execShellCmd("am force-stop "+ packageName);
     }
 
-    // 判断包是否在前台；
+    // 判断包是否在前台；FIXME wrong in Moto device
     private boolean isAppInFront(String packageName) {
         ActivityManager activityManager =(ActivityManager) getContext().getSystemService(
                 Context.ACTIVITY_SERVICE);

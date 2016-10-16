@@ -16,13 +16,14 @@ import java.util.List;
 public class PlanHelper {
     static private String TAG = "PlanHelper";
 
-    static public PlanInfo generatePlan(String targetPackageName, List<Script> scripts, int totalCount) {
+    static public PlanInfo generatePlan(String targetPackageName, List<Script> scripts, int totalCount, int type) {
         List<TaskEntry> entryList = new ArrayList<TaskEntry>();
         int average = totalCount / scripts.size();
         int count = 0;
         Log.i(TAG, "size is " + scripts.size() + " average is " + average + " total Count is " + totalCount);
         for(int i = 0 ; i < scripts.size() ; i++) {
             Script s = scripts.get(i);
+            s.setType(type);
             TaskEntry entry;
             // TODO need check script package exist;
             if(i == scripts.size() - 1) {
@@ -46,16 +47,15 @@ public class PlanHelper {
         while (entry != null) {
             running.setScript(entry.getScript());
             running.setTargetPackageName(entry.getTargetPackageName());
-            // FIXME type 只能是留存或者激活，依据界面的选择;
-            // TODO area need get;
+
+            // TODO area need to be get;
             PhoneInfoHelper.getInstance().generatePhoneInfo(entry.getTargetPackageName(), "area", entry.getScript().getType());
             running.prepare();
-            // FIXME need undo comment, when environment can get from internet;
-//            if (PhoneInfoHelper.getInstance().waitPhoneInfoValid(20)) {
+            if (PhoneInfoHelper.getInstance().waitPhoneInfoValid(20)) {
                 running.runScript();
-//            } else {
-//                Log.i(TAG, "FAILED, Phone info not valid.");
-//            }
+            } else {
+                Log.i(TAG, "FAILED, Phone info not valid.");
+            }
             entry = planInfo.getNextTaskEntry();
         }
     }

@@ -2,6 +2,7 @@ package com.wfx.autorunner.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.core.Environment;
 import com.wfx.autorunner.core.PhoneInfo;
 import com.wfx.autorunner.network.ServerApiManager;
+import com.wfx.autorunner.xposed.RandomData;
 
 import org.json.JSONObject;
 
@@ -31,10 +33,10 @@ public class PhoneInfoHelper {
     public final static int TYPE_OPEN = 0;
     public final static int TYPE_INSTALL = 1;
     private SharedPreferences preferences;
-    private String strIP,strIntentAddress;
+//    private String strIP,strIntentAddress;
 
     static private PhoneInfoHelper mInstance = null;
-    PhoneInfo phoneInfo = new PhoneInfo();
+    Environment environment = null;
 
     private PhoneInfoHelper() {}
     public static PhoneInfoHelper getInstance() {
@@ -48,16 +50,12 @@ public class PhoneInfoHelper {
         return ContextHolder.getContext();
     }
 
-    public PhoneInfo getPhoneInfo() {
-        return phoneInfo;
-    }
-
     public boolean waitPhoneInfoValid(int seconds) {
         if(seconds < 0 || seconds > 20) {
             seconds = 20;
         }
         for(int i = 0 ; i < seconds ; i++) {
-            if(phoneInfo.getValid()) {
+            if(environment != null) {
                 Log.i(TAG, "Get Phone info after " + i*1000 + " Seconds.");
                 return true;
             } else {
@@ -74,11 +72,13 @@ public class PhoneInfoHelper {
 
     // 从网络中获取手机信息；
     public void generatePhoneInfo(String packageName, String area, int type) {
-        phoneInfo.setValid(false);
+        environment = null;
         if(type == TYPE_OPEN) {
-            generateOpenedPhoneInfoInteral(packageName, area);
-        } else if(type == TYPE_INSTALL) {
+            // 留存
             generateRetentionPhoneInfo(packageName, area);
+        } else if(type == TYPE_INSTALL) {
+            // 激活
+            generateOpenedPhoneInfoInteral(packageName, area);
         }
     }
 
@@ -91,7 +91,8 @@ public class PhoneInfoHelper {
             @Override
             public void onFinished(boolean success, JSONObject response) {
                 Log.d("SEAN", "onFinished:" + response.toString());
-                Environment environment = JSON.parseObject(response.toString(), Environment.class);
+                environment = JSON.parseObject(response.toString(), Environment.class);
+                updatePreference();
             }
         }, packageName, area, "fetchEnveironment_"+packageName);
     }
@@ -105,11 +106,44 @@ public class PhoneInfoHelper {
             @Override
             public void onFinished(boolean success, JSONObject response) {
                 Log.d("SEAN", "onFinished:" + response.toString());
-                Environment environment = JSON.parseObject(response.toString(), Environment.class);
+                environment = JSON.parseObject(response.toString(), Environment.class);
+                updatePreference();
             }
         }, packageName, area, "fetchRetention_"+packageName);
     }
 
+    private void updatePreference() {
+        SharedPreferences pre = (SharedPreferences) ContextHolder.getContext().getSharedPreferences("prefs",
+                Context.MODE_WORLD_READABLE);
+        SharedPreferences.Editor editor= pre.edit();
+        editor.putString("imei", String.valueOf(environment.getImei()));
+        editor.putString("mac", environment.getMac());
+        editor.putString("bluemac", environment.getBlue_mac());
+        editor.putString("androidid",  environment.getAndroid_id());
+        editor.putString("imsi",environment.getImsi());
+        editor.putString("opid", environment.getOpid());
+        editor.putString("osv", environment.getOsv());
+        editor.putString("dv", environment.getDv());
+        editor.putString("dm", environment.getDm());
+
+        // FIXME
+        int densityDpi = RandomData.getDensityDpi(String.valueOf(environment.getSw()));
+        float density = RandomData.getDensity(String.valueOf(environment.getSh()));
+        float xdpi = RandomData.getDpi(densityDpi);
+        float ydpi = RandomData.getDpi(densityDpi);
+
+        editor.putString("fbl_w", String.valueOf(environment.getSw()));// 分辨率-宽
+        editor.putString("fbl_h", String.valueOf(environment.getSh()));// 分辨率-高
+        editor.putString("density", density + "");
+        editor.putString("densityDpi", densityDpi + "");
+        editor.putString("scaledDensity", density + "");
+        editor.putString("xdpi", xdpi + "");
+        editor.putString("ydpi", ydpi + "");
+        editor.putString("sw",String.valueOf(environment.getSw()));
+        editor.putString("sh", String.valueOf(environment.getSh()));
+        editor.apply();
+        Log.i(TAG,"Current Environment " + environment.toString());
+    }
 //    public void getIP(String paramString){
 //        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 //        // 2 创建StringRequest对象
