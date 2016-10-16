@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ public class ConfigRunningFragment extends Fragment {
     private EditText repeatCountEdit;
     private View targetAppView;
     private List<Script> scripts;
+    private RadioGroup rGroup;
 
     private static class OnGetScriptEvent {
         public OnGetScriptEvent(boolean succeed) {
@@ -144,7 +146,7 @@ public class ConfigRunningFragment extends Fragment {
                 }
             }
         }, chosenAppInfo.packageName, ServerApiManager.ScriptType.TYPE_ALL,
-                chosenAppInfo.packageName);
+                chosenAppInfo.packageName);  // FIXME 脚本暂不区分类型
     }
 
     @Override
@@ -156,6 +158,8 @@ public class ConfigRunningFragment extends Fragment {
         errorMessage = (TextView) rootView.findViewById(R.id.error_message);
         targetAppView = rootView.findViewById(R.id.chosen_app);
         scriptSpinner = (Spinner) rootView.findViewById(R.id.scrip_spinner);
+        rGroup = (RadioGroup) rootView.findViewById(R.id.rg_new_old);
+
         rootView.findViewById(R.id.retry_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,7 +178,14 @@ public class ConfigRunningFragment extends Fragment {
                         @Override
                         public void run() {
                             // install FIXME type 只能是留存或者激活，依据界面的选择;
-                            int type = PhoneInfoHelper.TYPE_OPEN; //  FIXME
+                            int type = PhoneInfoHelper.TYPE_INSTALL; //  FIXME
+                            int id = rGroup.getCheckedRadioButtonId();
+                            Log.i(TAG, "xxxxxxxxxxxx " + id);
+                            if(id == R.id.rg_new)
+                                type = PhoneInfoHelper.TYPE_INSTALL;
+                            else
+                                type = PhoneInfoHelper.TYPE_OPEN;
+                            // 手机信息必须确定是留存还是激活
                             PlanInfo planInfo = PlanHelper.generatePlan(chosenAppInfo.packageName, scripts, count, type);
                             PlanHelper.runPlan(planInfo);
                         }

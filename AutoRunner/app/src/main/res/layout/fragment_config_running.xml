@@ -5,11 +5,37 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <RelativeLayout
+        android:id="@+id/new_old"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        >
+        <RadioGroup
+            android:id="@+id/rg_new_old"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/rg_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/new_user"/>
+            <RadioButton
+                android:id="@+id/rg_old"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/old_user"/>
+        </RadioGroup>
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/chosen_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:layout_below="@id/new_old"
         android:clickable="true">
         <ImageView android:id="@+id/icon"
             android:layout_width="42dp"

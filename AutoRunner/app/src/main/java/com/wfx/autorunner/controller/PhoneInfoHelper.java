@@ -2,27 +2,15 @@ package com.wfx.autorunner.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.Preference;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.core.Environment;
-import com.wfx.autorunner.core.PhoneInfo;
 import com.wfx.autorunner.network.ServerApiManager;
 import com.wfx.autorunner.xposed.RandomData;
 
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by joe on 2016/9/15.
@@ -78,11 +66,11 @@ public class PhoneInfoHelper {
             generateRetentionPhoneInfo(packageName, area);
         } else if(type == TYPE_INSTALL) {
             // 激活
-            generateOpenedPhoneInfoInteral(packageName, area);
+            generateInstallPhoneInfoInteral(packageName, area);
         }
     }
 
-    private void generateOpenedPhoneInfoInteral(final String packageName, final String area){
+    private void generateInstallPhoneInfoInteral(final String packageName, final String area){
         ServerApiManager.instance().fetchEnvironmentInfo(new ServerApiManager.Listener() {
             @Override
             public void onStart() {

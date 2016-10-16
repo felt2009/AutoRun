@@ -18,4 +18,6 @@
 
     <string name="choose_app_activity_title">Choose Target App</string>
     <string name="btn_confirm">Confirm</string>
+    <string name="new_user">New User</string>
+    <string name="old_user">Old user</string>
 </resources>
