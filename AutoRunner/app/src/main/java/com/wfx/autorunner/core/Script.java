@@ -7,6 +7,11 @@ public class Script {
     private String scriptName;
     private int time;
     private int type;
+    public Script(String name, int time, int type) {
+        this.scriptName = name;
+        this.type = type;
+        this.time = time;
+    }
     public String getScriptName() {
         return scriptName;
     }

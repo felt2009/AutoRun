@@ -1,9 +1,7 @@
 package com.wfx.autorunner.fragments;
 
 
-//import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -33,6 +31,7 @@ import com.wfx.autorunner.controller.PlanHelper;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
 import com.wfx.autorunner.data.AppInfo;
+import com.wfx.autorunner.model.PlanInfoManager;
 import com.wfx.autorunner.network.ScriptResponse;
 import com.wfx.autorunner.network.ServerApiManager;
 
@@ -195,7 +194,10 @@ public class ConfigRunningFragment extends Fragment {
                             else
                                 type = PhoneInfoHelper.TYPE_OPEN;
                             // 手机信息必须确定是留存还是激活
-                            PlanInfo planInfo = PlanHelper.generatePlan(chosenAppInfo.packageName, scripts, count, type);
+                            Script chosenScript = scripts.get(scriptSpinner.getSelectedItemPosition());
+
+                            PlanInfo planInfo = PlanInfoManager.instance()
+                                    .createNewPlanInfo(chosenAppInfo.packageName, chosenScript, count, type);
                             PlanHelper.runPlan(planInfo);
                         }
                     });

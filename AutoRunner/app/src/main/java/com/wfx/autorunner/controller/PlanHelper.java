@@ -6,9 +6,12 @@ import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
 import com.wfx.autorunner.core.ScriptInfo;
 import com.wfx.autorunner.core.TaskEntry;
+import com.wfx.autorunner.db.DataBaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.R.attr.name;
 
 /**
  * Created by joe on 2016/10/11.
@@ -17,32 +20,8 @@ public class PlanHelper {
     static private String TAG = "PlanHelper";
     static boolean bStop = false;
 
-    static public PlanInfo generatePlan(String targetPackageName, List<Script> scripts, int totalCount, int type) {
-        List<TaskEntry> entryList = new ArrayList<TaskEntry>();
-        int average = totalCount / scripts.size();
-        int count = 0;
-        Log.i(TAG, "size is " + scripts.size() + " average is " + average + " total Count is " + totalCount);
-        for(int i = 0 ; i < scripts.size() ; i++) {
-            Script s = scripts.get(i);
-            s.setType(type);
-            TaskEntry entry;
-            // TODO need check script package exist;
-            if(i == scripts.size() - 1) {
-                // last script,
-                entry = new TaskEntry(targetPackageName, s, totalCount);
-            } else {
-                entry = new TaskEntry(targetPackageName, s, average);
-                count += average;
-            }
-            entryList.add(entry);
-        }
-        PlanInfo planInfo = new PlanInfo("test","test",100);
-        planInfo.setTasks(entryList);
-        return planInfo;
-    }
-
     static public void runPlan(PlanInfo planInfo) {
-        Log.i(TAG, "running" + planInfo.getTasks().get(0).toString());
+        Log.i(TAG, "running" + planInfo.getName());
         ScriptRunning running = new ScriptRunning();
         TaskEntry entry = planInfo.getNextTaskEntry();
         bStop = false;

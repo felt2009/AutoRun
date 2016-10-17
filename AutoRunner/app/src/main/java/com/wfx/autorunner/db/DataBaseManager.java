@@ -8,17 +8,21 @@ import java.util.List;
 
 public class DataBaseManager {
     private static DataBaseManager sDataBaseManager;
-    private final PlanInfoDao mPlanInfoDao;
+    private PlanInfoDao mPlanInfoDao;
+    private Context appCtx;
 
-    public static DataBaseManager instance(Context context) {
+    public static DataBaseManager instance() {
         if (sDataBaseManager == null) {
-            sDataBaseManager = new DataBaseManager(context);
+            sDataBaseManager = new DataBaseManager();
         }
         return sDataBaseManager;
     }
-
-    private DataBaseManager(Context context) {
+    public void init(Context context) {
+        appCtx = context.getApplicationContext();
         mPlanInfoDao = new PlanInfoDao(context);
+    }
+
+    private DataBaseManager() {
     }
 
     public synchronized void insert(PlanInfo planInfo) {

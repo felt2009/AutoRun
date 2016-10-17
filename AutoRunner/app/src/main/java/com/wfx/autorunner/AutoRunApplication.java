@@ -2,6 +2,8 @@ package com.wfx.autorunner;
 
 import android.app.Application;
 
+import com.wfx.autorunner.db.DataBaseManager;
+import com.wfx.autorunner.model.PlanInfoManager;
 import com.wfx.autorunner.network.ServerApiManager;
 
 /**
@@ -13,5 +15,7 @@ public class AutoRunApplication extends Application {
         super.onCreate();
         ContextHolder.initial(this);
         ServerApiManager.instance().init(this);
+        DataBaseManager.instance().init(this);
+        PlanInfoManager.instance().init();
     }
 }
