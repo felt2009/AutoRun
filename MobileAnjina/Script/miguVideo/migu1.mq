@@ -1,44 +1,44 @@
-Sub main
-	call miguScript1()
+// 观看时间
+Sub WatchingTime
+	Delay 5000
 End Sub
 
-Sub miguScript1
-	Delay 10000
-//	RunApp "com.cmcc.cmvideo"
-//		TracePrint "111"
-	Call RandomMoveScreen()
-	TracePrint "111"
+Sub Delay2s
 	Delay 2000
-	Call WatchMovie()
-	// Move back
-	TracePrint "2"
-	Delay 2000
-//	Call MoveBack()
-//	TracePrint "3"
-//	Delay 2000
 End Sub
+
+Sub Delay1s
+	Delay 1000
+End Sub
+
+// 等待migu启动完毕
+Sub WaitTime
+	Delay 10000
+End Sub
+
 Sub WatchMovie
 	Delay 3000
 	Call RandomMoveAndTouch()
-	Delay 5000
+	Call WatchingTime()
 	Tap 30, 69
-	Delay 2000
+	Delay2s
 End Sub
 
 Sub MoveToNextScreen
 	Dim Y = random(700, 800)
 	Swipe random(300, 400), Y+random(1,10), random(100, 200), Y+random(5,15)
-	Delay 1000
+	Delay2s
 End Sub
 
 Sub MoveBack
 	Dim i
 	For i = 0 To 5
 		Swipe 178, 300, 407, 300
-		Delay 1000
+		Delay2s
 	Next
 End Sub
 
+// 随机移动到电视剧 -- 记录片
 Function RandomMoveScreen
 	Dim i
 	For i = 0 To random(1,5)
@@ -49,21 +49,139 @@ End Function
 Function RandomMoveAndTouch
 	Dim i
 	For i = 1 To random(3, 5)
-		上下滑动 
+		小范围上下滑动 
 		Tap random(200,300), random(200,300)
 	Next
 End Function
 
 
-Sub 上下滑动
+Sub 小范围上下滑动
 	Swipe 387, 227, 387, 158
-	Delay 1000
+	Delay1s
+End Sub
+
+Sub SwipeDown
+	Dim x1 = random(200,300)
+	Dim x2 = x1 + random(1,10)
+	Dim y1 = random(500, 550)
+	Dim y2 = random(300,350)
+	Swipe x1, y1, x2, y2
+	Delay1s
+End Sub
+
+Sub RandomSwipeDown
+	For i = 1 To random(1, 3)
+		Call SwipeDown()
+	Next
+End Sub
+
+Sub RandomPlay
+	Dim x = random(100,400)
+	Dim y = random(200,500)
+	Tap x, y
+	Delay2s
 End Sub
 
 Function random(from,too) 
 	Randomize  
 	random = Int((too - from + 1) * Rnd() + from)
-	
 End Function
+
+Sub PlayMiddle
+	// X 100 -- 200, 350 -- 450, Y 550 -- 600
+	Dim i= random(0,1)
+	Dim x = random(100, 200)
+	If i = 1 Then 
+		x = random(350, 450)
+	End If
+	Tap x, random(550, 600)
+	Delay2s
+End Sub
+
+Sub PlayBottom
+	// X 100 -- 200, 350 -- 450, Y 730 -- 750
+	Dim i= random(0,1)
+	Dim x = random(100, 200)
+	If i = 1 Then 
+		x = random(350, 450)
+	End If
+	Tap x, random(730, 750)
+	Delay2s
+End Sub
+
+// TODO Delete
+Sub miguScript
+	Call WaitTime()
+//	RunApp "com.cmcc.cmvideo"
+//		TracePrint "111"
+	Call RandomMoveScreen()
+	TracePrint "111"
+	Delay2s
+	Call WatchMovie()
+	// Move back
+	TracePrint "2"
+	Delay2s
+//	Call MoveBack()
+//	TracePrint "3"
+//	Delay 2000
+End Sub
+
+// 在随机的电视剧--纪录片窗口下点击推荐的视频
+Sub miguScript1
+	Call WaitTime()
+	Call RandomMoveScreen()
+	Tap 381, 256
+	Delay 2000
+	Tap 371, 250	// 防止意外
+	Call WatchingTime()
+End Sub
+
+// 在随机的电视剧--纪录片窗口下点击中间的视频
+Sub miguScript2
+	Call WaitTime()
+	Call RandomMoveScreen()
+	Call PlayMiddle()
+	Call RandomMoveAndTouch() // 防止意外
+	Call WatchingTime()
+End Sub
+
+// 在随机的电视剧--纪录片窗口下点击下方的视频
+Sub miguScript3
+	Call WaitTime()
+	Call RandomMoveScreen()
+	Call PlayBottom()
+	Call RandomMoveAndTouch() // 防止意外
+	Call WatchingTime()
+End Sub
+
+// 在随机的电视剧--纪录片窗口随机滑动，点击任意位置视频
+Sub miguScript4
+	Call WaitTime()
+	Call RandomMoveScreen()
+	Call RandomSwipeDown()
+	Call RandomPlay()
+	Call RandomMoveAndTouch() // 防止意外
+	Call WatchingTime()
+End Sub
+
+Sub main
+	Dim i = random(1,4)
+	If i = 1 Then 
+		TracePrint "miguScript1"
+		call miguScript1()
+	End If
+	If i = 2 Then 
+		TracePrint "miguScript2"
+		call miguScript2()
+	End If
+	If i = 3 Then 
+		TracePrint "miguScript3"
+		call miguScript3()
+	End If
+	If i = 4 Then 
+		TracePrint "miguScript4"
+		call miguScript4()
+	End If
+End Sub
 
 Call main()	
