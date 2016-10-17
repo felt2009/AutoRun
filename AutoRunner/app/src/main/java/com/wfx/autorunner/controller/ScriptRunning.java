@@ -247,4 +247,20 @@ public class ScriptRunning {
     private void runHomeKey() {
         execShellCmd("input keyevent 3");
     }
+
+    public void  openVPN()
+    {
+        sleep(2000);
+        tap(100, 200);
+        sleep(1500);
+        tap(460, 400);
+    }
+
+    public void closeVPN()
+    {
+        sleep(5000);
+        tap(100, 200);
+        sleep(1500);
+        tap(100, 600);
+    }
 }
