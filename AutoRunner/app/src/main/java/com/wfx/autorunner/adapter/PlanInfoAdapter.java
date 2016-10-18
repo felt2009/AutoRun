@@ -50,17 +50,9 @@ public class PlanInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         PlanInfoItemHolder planInfoItemHolder = (PlanInfoItemHolder) holder;
         planInfoItemHolder.appName.setText(planInfo.getName());
         planInfoItemHolder.scriptName.setText(planInfo.getScript().getScriptName());
-        long now = System.currentTimeMillis();
-        long difference = now - planInfo.getTs();
-        Context context = planInfoItemHolder.appName.getContext();
-        String relativeDateString = (difference >= 0 && difference <= DateUtils.MINUTE_IN_MILLIS) ?
-                context.getString(R.string.create_date_just_now) :
-                DateUtils.getRelativeTimeSpanString(
-                        planInfo.getTs(),
-                        now,
-                        DateUtils.MINUTE_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_RELATIVE).toString();
-        planInfoItemHolder.createDate.setText(relativeDateString);
+        String progress = planInfo.getCount() + "/" + planInfo.getTotalCount();
+        Context context = holder.itemView.getContext();
+        planInfoItemHolder.createDate.setText(progress);
         planInfoItemHolder.startStopButton.setText(
                 planInfo.getStatus() == PlanInfo.Status.running.value ?
                         context.getString(R.string.btn_stop) : context.getString(R.string.btn_start));

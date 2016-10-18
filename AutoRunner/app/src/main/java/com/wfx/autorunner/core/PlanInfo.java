@@ -71,6 +71,9 @@ public class PlanInfo implements Comparable<PlanInfo> {
     public void setStatus(Status newStatus) {
         this.status = newStatus.value;
     }
+    public void increaseCount() {
+        ++count;
+    }
     /*public String getPath() {
         return path;
     }
@@ -93,6 +96,6 @@ public class PlanInfo implements Comparable<PlanInfo> {
                 return entry;
             }
         }*/
-        return (count++ < totalCount) ? new TaskEntry(name, script, totalCount) : null;
+        return (count < totalCount) ? new TaskEntry(name, script, totalCount) : null;
     }
 }

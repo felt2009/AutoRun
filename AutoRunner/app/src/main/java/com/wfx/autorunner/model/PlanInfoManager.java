@@ -64,6 +64,7 @@ public class PlanInfoManager {
     }
 
     public void startPlan(PlanInfo planInfo) {
+        Log.d(TAG, "startRunning plan xxxxxxxx");
         if (running != null && running.getTs() == planInfo.getTs()) {
             Log.d(TAG, "startRunning already running!");
             return;
@@ -75,8 +76,10 @@ public class PlanInfoManager {
         }
 
         if (running != null) {
-            runningTask.cancel();
-            runningTask = null;
+            if (runningTask != null) {
+                runningTask.cancel();
+                runningTask = null;
+            }
             running.setStatus(PlanInfo.Status.stop);
             DataBaseManager.instance().update(running);
         }
@@ -122,7 +125,7 @@ public class PlanInfoManager {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Log.d(TAG, "PlanInfoExecuteTask onPreExecute");
+            Log.d(TAG, "PlanInfoExecuteTask doInBackground");
             ScriptRunning running = new ScriptRunning();
             TaskEntry entry = planInfo.getNextTaskEntry();
             while (entry != null && !cancel) {
@@ -136,7 +139,13 @@ public class PlanInfoManager {
                 } else {
                     Log.i(TAG, "FAILED, Phone info not valid.");
                 }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 entry = planInfo.getNextTaskEntry();
+                publishProgress();
             }
             return null;
         }
@@ -145,6 +154,11 @@ public class PlanInfoManager {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
             Log.d(TAG, "PlanInfoExecuteTask onProgressUpdate");
+            if (running != null) {
+                running.increaseCount();
+                DataBaseManager.instance().update(running);
+                EventBus.getDefault().post(new UpdateRunningInfo());
+            }
         }
 
         @Override
