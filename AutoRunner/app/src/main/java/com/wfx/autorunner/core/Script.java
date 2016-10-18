@@ -7,6 +7,8 @@ public class Script {
     private String scriptName;
     private int time;
     private int type;
+    public Script() {
+    }
     public Script(String name, int time, int type) {
         this.scriptName = name;
         this.type = type;
