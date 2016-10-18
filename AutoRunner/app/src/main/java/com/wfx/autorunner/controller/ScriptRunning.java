@@ -248,19 +248,26 @@ public class ScriptRunning {
         execShellCmd("input keyevent 3");
     }
 
+    public void backKey() {execShellCmd("input keyevent 4");}
+
     public void  openVPN()
     {
-        sleep(2000);
-        tap(100, 200);
         sleep(1500);
-        tap(460, 400);
+        tap(100, 200);
+        sleep(1000);
+        backKey(); //通过返回键取消软键盘
+        sleep(1500);
+        tap(460, 650);
+        sleep(1000);
+        backKey(); //退出当前的界面
     }
 
-    public void closeVPN()
-    {
-        sleep(5000);
+    public void closeVPN() {
+        sleep(1500);
         tap(100, 200);
         sleep(1500);
         tap(100, 600);
+        sleep(1000);
+        backKey(); //退出当前的界面
     }
 }
