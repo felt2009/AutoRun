@@ -42,6 +42,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import static android.R.attr.type;
+
 /**
  * Created by sean on 9/22/16.
  */
@@ -173,9 +175,22 @@ public class ConfigRunningFragment extends Fragment {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int type;
+                int id = rGroup.getCheckedRadioButtonId();
+                if(id == R.id.rg_new)
+                    type = PhoneInfoHelper.TYPE_INSTALL;
+                else
+                    type = PhoneInfoHelper.TYPE_OPEN;
+                final int count = Integer.parseInt(repeatCountEdit.getText().toString());
+                Script chosenScript = scripts.get(scriptSpinner.getSelectedItemPosition());
+                PlanInfo planInfo = PlanInfoManager.instance()
+                        .createNewPlanInfo(chosenAppInfo.packageName, chosenScript, count, type);
+                getActivity().finish();
+
                 // TODO: add new task
                 // All the scripts should be run, no need choose one script;
                 if(scripts.size() > 0 && chosenAppInfo != null) {
+                    /*
                     if(!updateScripts(scripts)) {
                         // Show Message, no insatalled script;
                         Toast.makeText(ContextHolder.getContext(),ContextHolder.getContext().getString(R.string.no_script_package), Toast.LENGTH_LONG).show();
@@ -203,6 +218,7 @@ public class ConfigRunningFragment extends Fragment {
                     });
                     thread.start();
                     btnStop.setEnabled(true);  // FIXME
+                    */
                 }
             }
         });

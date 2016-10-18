@@ -15,9 +15,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.wfx.autorunner.adapter.PlanInfoAdapter;
+import com.wfx.autorunner.core.PlanInfo;
+import com.wfx.autorunner.event.OnClickStartStopButton;
+import com.wfx.autorunner.event.UpdateRunningInfo;
 import com.wfx.autorunner.model.PlanInfoManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,7 +54,7 @@ public class MainActivity extends AppCompatActivity
                 outRect.left = outRect.right = 2 * cardSpace;
             }
         });
-        planInfoAdapter = new PlanInfoAdapter(PlanInfoManager.instance().getPlanInfos());
+        planInfoAdapter = new PlanInfoAdapter(PlanInfoManager.instance().getPlanInfoList());
         planInfoRecyclerView.setAdapter(planInfoAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -67,10 +75,31 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Subscribe
+    public void onEvent(OnClickStartStopButton onClickStartStopButton) {
+        if (onClickStartStopButton.planInfo.getStatus() == PlanInfo.Status.running.value) {
+            PlanInfoManager.instance().stopPlan(onClickStartStopButton.planInfo);
+        } else {
+            PlanInfoManager.instance().startPlan(onClickStartStopButton.planInfo);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateRunningInfo updateRunningInfo) {
+        planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfoList());
+    }
+
     @Override
     public void onResume() {
+        EventBus.getDefault().register(this);
         super.onResume();
-        planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfos());
+        planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfoList());
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
     }
 
     @Override

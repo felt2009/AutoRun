@@ -1,5 +1,6 @@
 package com.wfx.autorunner.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 import com.wfx.autorunner.R;
 import com.wfx.autorunner.core.PlanInfo;
+import com.wfx.autorunner.event.OnClickStartStopButton;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +50,24 @@ public class PlanInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         planInfoItemHolder.scriptName.setText(planInfo.getScript().getScriptName());
         long now = System.currentTimeMillis();
         long difference = now - planInfo.getTs();
+        Context context = planInfoItemHolder.appName.getContext();
         String relativeDateString = (difference >= 0 && difference <= DateUtils.MINUTE_IN_MILLIS) ?
-                planInfoItemHolder.appName.getContext().getString(R.string.create_date_just_now) :
+                context.getString(R.string.create_date_just_now) :
                 DateUtils.getRelativeTimeSpanString(
                         planInfo.getTs(),
                         now,
                         DateUtils.MINUTE_IN_MILLIS,
                         DateUtils.FORMAT_ABBREV_RELATIVE).toString();
         planInfoItemHolder.createDate.setText(relativeDateString);
+        planInfoItemHolder.startStopButton.setText(
+                planInfo.getStatus() == PlanInfo.Status.running.value ?
+                        context.getString(R.string.btn_stop) : context.getString(R.string.btn_start));
+        planInfoItemHolder.startStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EventBus.getDefault().post(new OnClickStartStopButton(planInfo));
+            }
+        });
     }
 
     @Override
@@ -67,6 +81,11 @@ public class PlanInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public AppCompatButton startStopButton;
         public PlanInfoItemHolder(View itemView) {
             super(itemView);
+            appIcon = (ImageView) itemView.findViewById(R.id.target_app_icon);
+            appName = (TextView) itemView.findViewById(R.id.target_app_name);
+            scriptName = (TextView) itemView.findViewById(R.id.script_name);
+            createDate = (TextView) itemView.findViewById(R.id.create_time);
+            startStopButton = (AppCompatButton) itemView.findViewById(R.id.btn_start_stop);
         }
     }
 }

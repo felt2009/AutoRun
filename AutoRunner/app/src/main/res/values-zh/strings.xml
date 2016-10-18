@@ -7,10 +7,11 @@
     <string name="app_name_hint">点击选择目标应用</string>
     <string name="error_message">获取脚本失败，请重试</string>
     <string name="btn_confirm">开始执行</string>
-    <string name="btn_stop">停止执行</string>
+    <string name="btn_stop">停止</string>
     <string name="new_user">激活</string>
     <string name="old_user">留存</string>
     <string name="no_script_package">手机上没有安装对应的脚本文件，请重新安装</string>
 
     <string name="create_date_just_now">刚刚</string>
+    <string name="btn_start">开始</string>
 </resources>

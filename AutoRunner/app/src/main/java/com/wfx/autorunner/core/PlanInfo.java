@@ -9,7 +9,13 @@ public class PlanInfo implements Comparable<PlanInfo> {
 
     @Override
     public int compareTo(PlanInfo planInfo) {
-        return ((Long)ts).compareTo((planInfo.ts));
+        if (ts < planInfo.getTs()) {
+            return 1;
+        } if (ts > planInfo.getTs()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 
     public enum Status {
@@ -61,6 +67,9 @@ public class PlanInfo implements Comparable<PlanInfo> {
     }
     public String getName() {
         return name;
+    }
+    public void setStatus(Status newStatus) {
+        this.status = newStatus.value;
     }
     /*public String getPath() {
         return path;
