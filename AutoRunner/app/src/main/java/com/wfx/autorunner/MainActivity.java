@@ -1,8 +1,11 @@
 package com.wfx.autorunner;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,19 +15,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import com.wfx.autorunner.adapter.PlanInfoAdapter;
+import com.wfx.autorunner.model.PlanInfoManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private TextView demoText, scriptText;
+    private RecyclerView planInfoRecyclerView;
+    private int cardSpace;
+    private PlanInfoAdapter planInfoAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        demoText = (TextView) findViewById(R.id.demo_text);
-        scriptText = (TextView) findViewById(R.id.script_text);
+        planInfoRecyclerView = (RecyclerView) findViewById(R.id.plan_list);
         setSupportActionBar(toolbar);
+
+        planInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cardSpace = getResources().getDimensionPixelSize(R.dimen.card_space);
+        planInfoRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                       RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int pos = parent.getChildAdapterPosition(view);
+                int count = parent.getAdapter().getItemCount();
+                outRect.top = (pos == 0) ? 2 * cardSpace : cardSpace;
+                outRect.bottom = (pos == (count - 1)) ? 2 * cardSpace : cardSpace;
+                outRect.left = outRect.right = 2 * cardSpace;
+            }
+        });
+        planInfoAdapter = new PlanInfoAdapter(PlanInfoManager.instance().getPlanInfos());
+        planInfoRecyclerView.setAdapter(planInfoAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,41 +65,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-
-        /*
-        // TODO: test only
-        ServerApiManager.instance().fetchEnvironmentInfo(new ServerApiManager.Listener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onFinished(boolean success, JSONObject response) {
-                Log.d("SEAN", "onFinished:" + response.toString());
-                Environment environment = JSON.parseObject(response.toString(), Environment.class);
-                Log.d("SEAN", "onFinished:" + environment.toString());
-                demoText.setText(environment.toString());
-            }
-        }, "com.lionmobi.battery", "南京", "fetchEnvironment_com.lionmobi.battery");
-
-        ServerApiManager.instance().fetchScriptInfo(new ServerApiManager.Listener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onFinished(boolean success, JSONObject response) {
-                Log.d("SEAN", "onFinished:" + response.toString());
-                ScriptResponse scriptResponse = JSON.parseObject(response.toString(), ScriptResponse.class);
-                Log.d("SEAN", "code:" + scriptResponse.getCode() + ", msg:" + scriptResponse.getMsg().size());
-                for (Script script: scriptResponse.getMsg()) {
-                    Log.d("SEAN", "script:" + script.getScriptName() + ", time:" + script.getTime()
-                            + ", type:" + script.getType());
-                }
-            }
-        }, "com.lionmobi.battery", ServerApiManager.ScriptType.TYPE_ACTIVATE, "fetchScript_com.lionmobi.battery");
-        */
+    @Override
+    public void onResume() {
+        super.onResume();
+        planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfos());
     }
 
     @Override

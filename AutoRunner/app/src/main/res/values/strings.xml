@@ -22,4 +22,6 @@
     <string name="new_user">New User</string>
     <string name="old_user">Old user</string>
     <string name="no_script_package">No script package installed. Please Install again</string>
+
+    <string name="create_date_just_now">just now</string>
 </resources>

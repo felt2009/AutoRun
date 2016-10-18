@@ -11,4 +11,6 @@
     <string name="new_user">激活</string>
     <string name="old_user">留存</string>
     <string name="no_script_package">手机上没有安装对应的脚本文件，请重新安装</string>
+
+    <string name="create_date_just_now">刚刚</string>
 </resources>
