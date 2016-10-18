@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.wfx.autorunner.R;
 import com.wfx.autorunner.core.PlanInfo;
+import com.wfx.autorunner.data.AppInfo;
 import com.wfx.autorunner.event.OnClickStartStopButton;
+import com.wfx.autorunner.utils.PackageUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -68,6 +70,11 @@ public class PlanInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 EventBus.getDefault().post(new OnClickStartStopButton(planInfo));
             }
         });
+        final AppInfo appInfo = PackageUtils.getAppInfo(planInfo.getName());
+        if (appInfo != null) {
+            planInfoItemHolder.appName.setText(appInfo.appName);
+            planInfoItemHolder.appIcon.setImageDrawable(appInfo.appIcon);
+        }
     }
 
     @Override

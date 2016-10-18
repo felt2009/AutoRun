@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.wfx.autorunner.adapter.PlanInfoAdapter;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.event.OnClickStartStopButton;
+import com.wfx.autorunner.event.UpdateResolveInfo;
 import com.wfx.autorunner.event.UpdateRunningInfo;
 import com.wfx.autorunner.model.PlanInfoManager;
 
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(UpdateRunningInfo updateRunningInfo) {
+        planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfoList());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UpdateResolveInfo updateResolveInfo) {
         planInfoAdapter.updatePlans(PlanInfoManager.instance().getPlanInfoList());
     }
 

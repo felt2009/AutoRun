@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.wfx.autorunner.R;
 import com.wfx.autorunner.data.AppInfo;
+import com.wfx.autorunner.utils.PackageUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -122,22 +123,8 @@ public class ChooseAppFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
             Log.d(TAG, "GetInstalledAppTask doInBackground");
-            try {
-                PackageManager pm = getContext().getPackageManager();
-                Intent main = new Intent(Intent.ACTION_MAIN, null);
-                main.addCategory(Intent.CATEGORY_LAUNCHER);
-                List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(main,
-                        0);
-                Collections.sort(resolveInfoList, new ResolveInfo.DisplayNameComparator(pm));
-                apps = new ArrayList<>();
-                for (ResolveInfo resolveInfo : resolveInfoList) {
-                    Log.d(TAG, "GetInstalledAppTask doInBackground packageName:" + resolveInfo.activityInfo.packageName);
-                    apps.add(new AppInfo(resolveInfo.loadLabel(pm).toString(),
-                            resolveInfo.activityInfo.packageName, resolveInfo.loadIcon(pm)));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            apps = new ArrayList<>();
+            apps.addAll(PackageUtils.getAppInfoList());
             return null;
         }
 

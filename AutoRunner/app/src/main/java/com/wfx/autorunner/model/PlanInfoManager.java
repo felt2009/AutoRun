@@ -44,6 +44,13 @@ public class PlanInfoManager {
     }
     public void init() {
         planInfoList = DataBaseManager.instance().getPlans();
+        new Thread() {
+            @Override
+            public void run() {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                PackageUtils.getAppInfoList();
+            }
+        }.start();
     }
     public List<PlanInfo> getPlanInfoList() {
         return planInfoList;
