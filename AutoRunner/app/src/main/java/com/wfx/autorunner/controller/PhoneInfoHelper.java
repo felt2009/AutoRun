@@ -2,12 +2,20 @@ package com.wfx.autorunner.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.core.Environment;
 import com.wfx.autorunner.network.ServerApiManager;
+import com.wfx.autorunner.network.VpnSetting;
+import com.wfx.autorunner.xposed.MyStringRequest;
 import com.wfx.autorunner.xposed.RandomData;
 
 import org.json.JSONObject;
@@ -21,6 +29,16 @@ public class PhoneInfoHelper {
     public final static int TYPE_OPEN = 0;
     public final static int TYPE_INSTALL = 1;
     private SharedPreferences preferences;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    private String area;
 //    private String strIP,strIntentAddress;
 
     static private PhoneInfoHelper mInstance = null;
@@ -57,6 +75,47 @@ public class PhoneInfoHelper {
         Log.i(TAG, "Cannot get Phoneinfo, something wrong, maybe network problem.");
         return false;
     }
+    // TODO 需要重构
+    public boolean waitVPNValid(int seconds) {
+        if(seconds < 0 || seconds > 20) {
+            seconds = 5;
+        }
+        for(int i = 0 ; i < seconds ; i++) {
+            if(VpnSetting.isVpnUsed()) {
+                Log.i(TAG, "Get Phone info after " + i*1000 + " Seconds.");
+                return true;
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Log.i(TAG, "VPN not valid");
+        return false;
+    }
+
+    // TODO 需要重构
+    public boolean waitAreaValid(int seconds) {
+        if(seconds < 0 || seconds > 20) {
+            seconds = 5;
+        }
+        for(int i = 0 ; i < seconds ; i++) {
+            if(!PhoneInfoHelper.getInstance().getArea().equals("")) {
+                Log.i(TAG, "Get area after " + i*1000 + " Seconds." + area);
+                return true;
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Log.i(TAG, "Area get run");
+        return false;
+    }
 
     // 从网络中获取手机信息；
     public void generatePhoneInfo(String packageName, String area, int type) {
@@ -78,9 +137,11 @@ public class PhoneInfoHelper {
 
             @Override
             public void onFinished(boolean success, JSONObject response) {
-                Log.d("SEAN", "onFinished:" + response.toString());
-                environment = JSON.parseObject(response.toString(), Environment.class);
-                updatePreference();
+                if(response != null) {
+                    Log.d("SEAN", "onFinished:" + response.toString());
+                    environment = JSON.parseObject(response.toString(), Environment.class);
+                    updatePreference();
+                }
             }
         }, packageName, area, "fetchEnveironment_"+packageName);
     }
@@ -93,9 +154,11 @@ public class PhoneInfoHelper {
 
             @Override
             public void onFinished(boolean success, JSONObject response) {
-                Log.d("SEAN", "onFinished:" + response.toString());
-                environment = JSON.parseObject(response.toString(), Environment.class);
-                updatePreference();
+                if(response != null) {
+                    Log.d("SEAN", "onFinished:" + response.toString());
+                    environment = JSON.parseObject(response.toString(), Environment.class);
+                    updatePreference();
+                }
             }
         }, packageName, area, "fetchRetention_"+packageName);
     }
@@ -132,44 +195,48 @@ public class PhoneInfoHelper {
         editor.apply();
         Log.i(TAG,"Current Environment " + environment.toString());
     }
-//    public void getIP(String paramString){
-//        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-//        // 2 创建StringRequest对象
-//        MyStringRequest mStringRequest = new MyStringRequest(paramString,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        if(!TextUtils.isEmpty(response)){
-//                            Log.e(TAG, response);
-//                            if (response.contains("您的IP是")) {
-//                                int k = 1 + response.indexOf('[');
-//                                int m = response.indexOf(']');
-//
-//                                strIP = response.substring(k, m);
-//
-////                                Toast.makeText(TestActivity.this,strIP,Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                            if (response.contains("来自")) {
-//                                int i = 3 + response.indexOf("来自：");
-//                                int j = response.indexOf("</center>");
-//                                strIntentAddress = response
-//                                        .substring(i, j);
-//                                Log.e(TAG, strIntentAddress);
-////                                Toast.makeText(TestActivity.this,strIntentAddress,Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                System.out.println("请求错误:" + error.toString());
-//            }
-//        });
-//        // 3 将StringRequest添加到RequestQueue
-//        requestQueue.add(mStringRequest);
-//    }
+    // TODO 需要重构
+    public void getIP(String paramString){
+        RequestQueue requestQueue = Volley.newRequestQueue(ContextHolder.getContext());
+        area = "";
+        // 2 创建StringRequest对象
+        MyStringRequest mStringRequest = new MyStringRequest(paramString,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(!TextUtils.isEmpty(response)){
+                            Log.e(TAG, response);
+                            if (response.contains("您的IP是")) {
+                                int k = 1 + response.indexOf('[');
+                                int m = response.indexOf(']');
+
+                                String strIP = response.substring(k, m);
+
+                                Toast.makeText(getContext(),strIP,Toast.LENGTH_SHORT).show();
+
+                            }
+                            if (response.contains("来自")) {
+                                int i = 3 + response.indexOf("来自：");
+                                int j = response.indexOf("</center>");
+                                String strIntentAddress = response
+                                        .substring(i, j);
+                                String[] sArray = strIntentAddress.split(" ");
+                                area = sArray[0];
+                                Log.e(TAG, area);
+                                Toast.makeText(getContext(),sArray[0],Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("请求错误:" + error.toString());
+            }
+        });
+        // 3 将StringRequest添加到RequestQueue
+        requestQueue.add(mStringRequest);
+    }
 
     // 获取手机里所有的包名 TODO
 //    public String getAllPackageStr() {

@@ -1,5 +1,6 @@
 package com.wfx.autorunner.model;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Process;
 import android.util.Log;
@@ -10,6 +11,7 @@ import com.wfx.autorunner.R;
 import com.wfx.autorunner.controller.PhoneInfoHelper;
 import com.wfx.autorunner.controller.PlanHelper;
 import com.wfx.autorunner.controller.ScriptRunning;
+import com.wfx.autorunner.core.PhoneInfo;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.core.Script;
 import com.wfx.autorunner.core.TaskEntry;
@@ -36,11 +38,15 @@ public class PlanInfoManager {
     private static PlanInfoManager sInstance;
     private PlanInfo running;
     private PlanInfoExecuteTask runningTask;
+    Activity activity;
     public static PlanInfoManager instance() {
         if (sInstance == null) {
             sInstance = new PlanInfoManager();
         }
         return sInstance;
+    }
+    public void setActivity(Activity ac) {
+        activity = ac;
     }
     public void init() {
         planInfoList = DataBaseManager.instance().getPlans();
@@ -57,6 +63,7 @@ public class PlanInfoManager {
     }
     public PlanInfo createNewPlanInfo(String targetPackageName, Script script, int totalCount, int type) {
         PlanInfo planInfo = new PlanInfo(targetPackageName, System.currentTimeMillis(), script, totalCount);
+        script.setType(type);  // 设置Type
         DataBaseManager.instance().insert(planInfo);
         planInfoList.add(planInfo);
         Collections.sort(planInfoList);
@@ -128,11 +135,24 @@ public class PlanInfoManager {
             Log.d(TAG, "PlanInfoExecuteTask doInBackground");
             ScriptRunning running = new ScriptRunning();
             TaskEntry entry = planInfo.getNextTaskEntry();
+            PhoneInfoHelper.getInstance().setArea("");
             while (entry != null && !cancel) {
                 running.setScript(entry.getScript());
                 running.setTargetPackageName(entry.getTargetPackageName());
                 // TODO area need to be get;
-                PhoneInfoHelper.getInstance().generatePhoneInfo(entry.getTargetPackageName(), "area", entry.getScript().getType());
+                running.runVPN(activity);
+                if(!PhoneInfoHelper.getInstance().waitVPNValid(5)) {
+                    Log.i(TAG, "FAILED, VPN wrong, "); //  Need Add to Log file
+                    planInfo.increaseCount();
+                    entry = planInfo.getNextTaskEntry();
+                    publishProgress();
+                    continue;
+                }
+                if(PhoneInfoHelper.getInstance().getArea().equals("")) {
+                    PhoneInfoHelper.getInstance().getIP("http://1212.ip138.com/ic.asp"); // FIXME 只获取一次。假定只是一个地区（可以认为是手机标示）
+                    PhoneInfoHelper.getInstance().waitAreaValid(20);
+                }
+                PhoneInfoHelper.getInstance().generatePhoneInfo(entry.getTargetPackageName(), PhoneInfoHelper.getInstance().getArea(), entry.getScript().getType());
                 running.prepare();
                 if (PhoneInfoHelper.getInstance().waitPhoneInfoValid(20)) {
                     running.runScript();
@@ -144,9 +164,11 @@ public class PlanInfoManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                planInfo.increaseCount();
                 entry = planInfo.getNextTaskEntry();
                 publishProgress();
             }
+//            running.finish();
             return null;
         }
 
@@ -155,7 +177,7 @@ public class PlanInfoManager {
             super.onProgressUpdate(values);
             Log.d(TAG, "PlanInfoExecuteTask onProgressUpdate");
             if (running != null) {
-                running.increaseCount();
+//                running.increaseCount();
                 DataBaseManager.instance().update(running);
                 EventBus.getDefault().post(new UpdateRunningInfo());
             }

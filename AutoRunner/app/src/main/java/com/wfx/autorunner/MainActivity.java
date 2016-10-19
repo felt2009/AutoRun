@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.wfx.autorunner.adapter.PlanInfoAdapter;
+import com.wfx.autorunner.controller.ScriptRunning;
 import com.wfx.autorunner.core.PlanInfo;
 import com.wfx.autorunner.event.OnClickStartStopButton;
 import com.wfx.autorunner.event.UpdateResolveInfo;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // request su
+        ScriptRunning.runSu();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         planInfoRecyclerView = (RecyclerView) findViewById(R.id.plan_list);
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         });
         planInfoAdapter = new PlanInfoAdapter(PlanInfoManager.instance().getPlanInfoList());
         planInfoRecyclerView.setAdapter(planInfoAdapter);
-
+        PlanInfoManager.instance().setActivity(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Subscribe

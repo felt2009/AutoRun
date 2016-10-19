@@ -9,6 +9,7 @@ import android.util.Log;
 import com.wfx.autorunner.ContextHolder;
 import com.wfx.autorunner.core.Script;
 import com.wfx.autorunner.core.ScriptInfo;
+import com.wfx.autorunner.network.VpnSetting;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,6 +46,16 @@ public class ScriptRunning {
 
     public void prepare() {
         Log.i(TAG, "prepare");
+        if(script != null) {
+            killRunningPackageWithShell(script.getScriptName());
+            sleep(1000);
+            killRunningPackageWithShell(targetPackageName);
+            sleep(2000);
+        }
+    }
+
+    public void finish() {
+        Log.i(TAG, "finish");
         if(script != null) {
             killRunningPackageWithShell(script.getScriptName());
             sleep(1000);
@@ -112,6 +123,7 @@ public class ScriptRunning {
         runVolumeDownKey();
         sleep(3000);
         runPackage(targetPackage);
+        sleep(3000);
 //        sleep(10000);
 //        if(isAppInFront(targetPackage)) {
 //            Log.i(TAG, "test Package is in front " + targetPackage);
@@ -250,24 +262,41 @@ public class ScriptRunning {
 
     public void backKey() {execShellCmd("input keyevent 4");}
 
+    public void runVPN(Context context) {
+        Intent intent = new Intent("android.net.vpn.SETTINGS");
+        if(VpnSetting.isVpnUsed()) {
+            context.startActivity(intent);
+            closeVPN();
+        }
+        context.startActivity(intent);
+        openVPN();
+    }
     public void  openVPN()
     {
-        sleep(1500);
+        sleep(2500);
         tap(100, 200);
         sleep(1000);
         backKey(); //通过返回键取消软键盘
         sleep(1500);
         tap(460, 650);
-        sleep(1000);
+        sleep(3000);
         backKey(); //退出当前的界面
     }
 
     public void closeVPN() {
-        sleep(1500);
+        sleep(2500);
         tap(100, 200);
-        sleep(1500);
+        sleep(2500);
         tap(100, 600);
-        sleep(1000);
+        sleep(2000);
         backKey(); //退出当前的界面
+    }
+
+    static public void runSu() {
+        try {
+            Runtime.getRuntime().exec("su");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
