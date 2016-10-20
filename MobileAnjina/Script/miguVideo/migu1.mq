@@ -2,7 +2,9 @@
 Sub WatchingTime
 	Delay 5000
 End Sub
-
+Sub WaitRefresh
+	Delay 5000
+End Sub
 Sub Delay2s
 	Delay 2000
 End Sub
@@ -11,9 +13,9 @@ Sub Delay1s
 	Delay 1000
 End Sub
 
-// 等待migu启动完毕
+// 等待migu启动完毕 12s
 Sub WaitTime
-	Delay 10000
+	Delay 12000
 End Sub
 
 Sub WatchMovie
@@ -44,6 +46,7 @@ Function RandomMoveScreen
 	For i = 0 To random(1,5)
 		MoveToNextScreen
 	Next
+	WaitRefresh
 End Function
 
 Function RandomMoveAndTouch
