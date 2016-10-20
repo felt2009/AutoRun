@@ -119,11 +119,11 @@ public class ScriptRunning {
     private boolean runScript(String scriptPackage, String targetPackage,int runningTime) {
         Log.i(TAG, "runScript run time is " + runningTime);
         runPackage(scriptPackage);
-        sleep(8000);
+        sleep(10000);
         runVolumeDownKey();
-        sleep(3000);
+        sleep(1000);
         runPackage(targetPackage);
-        sleep(3000);
+        sleep(5000);
 //        sleep(10000);
 //        if(isAppInFront(targetPackage)) {
 //            Log.i(TAG, "test Package is in front " + targetPackage);
@@ -132,6 +132,7 @@ public class ScriptRunning {
 //            return false;
 //        }
         sleep(runningTime * 1000);
+        finish();
         return true;
     }
 
