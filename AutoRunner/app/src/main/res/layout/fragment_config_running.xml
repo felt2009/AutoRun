@@ -114,16 +114,9 @@
     </RelativeLayout>
     <android.support.v7.widget.AppCompatButton
         android:layout_margin="16dp"
-        android:id="@+id/stop" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:enabled="false"
-        android:text="@string/btn_stop" />
-    <android.support.v7.widget.AppCompatButton
-        android:layout_margin="16dp"
         android:id="@+id/confirm" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/stop"
+        android:layout_alignParentBottom="true"
         android:enabled="false"
         android:text="@string/btn_confirm" />
 
